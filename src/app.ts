@@ -60,6 +60,18 @@ app.get("/api/baby-foods/:id", async (req, res) => {
   }
 });
 
+//  原材料一覧取得
+app.get("/api/ingredients", async (req, res) => {
+  try {
+    const db = getDatabase();
+    const ingredients = await db.all("SELECT * FROM ingredients");
+    res.json(ingredients);
+  } catch (error) {
+    console.error("エラーの詳細:", error);
+    res.status(500).json({ error: "データの取得に失敗しました" });
+  }
+});
+
 app.listen(8000, () => {
   console.log("Example app listening on port 8000!");
 });

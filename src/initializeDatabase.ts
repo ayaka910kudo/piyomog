@@ -17,6 +17,7 @@ export async function initializeDatabase(): Promise<Database> {
   }
 }
 
+// db接続するための情報
 export function getDatabase(): Database {
   if (!db) {
     throw new Error("データベースが初期化されていません");
