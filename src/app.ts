@@ -1,8 +1,11 @@
-import * as express from "express";
+import express, { Request, Response } from "express";
 import { initializeDatabase, getDatabase } from "./initializeDatabase";
 
 // Expressの初期化
 const app = express();
+
+// JSONパーサーの追加
+app.use(express.json());
 
 // アプリケーション起動時にデータベース接続を確立
 initializeDatabase();
@@ -69,6 +72,55 @@ app.get("/api/ingredients", async (req, res) => {
   } catch (error) {
     console.error("エラーの詳細:", error);
     res.status(500).json({ error: "データの取得に失敗しました" });
+  }
+});
+
+interface IngredientRequestBody {
+  name: string;
+}
+
+// 原材料追加
+app.post("/api/ingredients", async (req, res: any) => {
+  try {
+    const db = getDatabase();
+    const { name } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ error: "原材料名が必要です" });
+    }
+
+    await db.run("INSERT INTO ingredients (name) VALUES (?)", name);
+
+    res.status(201).json({ message: "原材料を追加しました" });
+  } catch (error) {
+    console.error("エラーの詳細:", error);
+    res.status(500).json({ error: "原材料の追加に失敗しました" });
+  }
+});
+
+// 原材料削除
+app.delete("/api/ingredients/:id", async (req, res: any) => {
+  try {
+    const db = getDatabase();
+    const { id } = req.params;
+
+    // 指定されたIDの原材料が存在するか確認
+    const ingredient = await db.get(
+      "SELECT * FROM ingredients WHERE id = ?",
+      id
+    );
+    if (!ingredient) {
+      return res
+        .status(404)
+        .json({ error: "指定された原材料が見つかりません" });
+    }
+
+    await db.run("DELETE FROM ingredients WHERE id = ?", id);
+
+    res.status(200).json({ message: "原材料を削除しました" });
+  } catch (error) {
+    console.error("エラーの詳細:", error);
+    res.status(500).json({ error: "原材料の削除に失敗しました" });
   }
 });
 
