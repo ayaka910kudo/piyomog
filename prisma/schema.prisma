@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// 商品テーブル
+model BabyFood {
+  id            Int                  @id @default(autoincrement())
+  name          String
+  reactionStars Int                  @map("reaction_stars")
+  memo          String?
+  createdAt     DateTime             @default(now()) @map("created_at")
+  ingredients   BabyFoodIngredient[]
+
+  @@map("baby_foods")
+}
+
+// 原材料テーブル
+model Ingredient {
+  id        Int                  @id @default(autoincrement())
+  name      String               @unique
+  babyFoods BabyFoodIngredient[]
+
+  @@map("ingredients")
+}
+
+// 中間テーブル
+model BabyFoodIngredient {
+  id           Int        @id @default(autoincrement())
+  babyFoodId   Int        @map("baby_food_id")
+  ingredientId Int        @map("ingredient_id")
+  babyFood     BabyFood   @relation(fields: [babyFoodId], references: [id])
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@unique([babyFoodId, ingredientId])
+  @@map("baby_foods_ingredients")
+}
