@@ -9,20 +9,24 @@ datasource db {
 
 // 商品テーブル
 model BabyFood {
-  id            Int                  @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   name          String
-  reactionStars Int                  @map("reaction_stars")
+  reactionStars Int      @map("reaction_stars")
   memo          String?
-  createdAt     DateTime             @default(now()) @map("created_at")
-  ingredients   BabyFoodIngredient[]
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  // 中間テーブル
+  ingredients BabyFoodIngredient[]
 
   @@map("baby_foods")
 }
 
 // 原材料テーブル
 model Ingredient {
-  id        Int                  @id @default(autoincrement())
-  name      String               @unique
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  // 中間テーブル
   babyFoods BabyFoodIngredient[]
 
   @@map("ingredients")
@@ -30,11 +34,13 @@ model Ingredient {
 
 // 中間テーブル
 model BabyFoodIngredient {
-  id           Int        @id @default(autoincrement())
-  babyFoodId   Int        @map("baby_food_id")
-  ingredientId Int        @map("ingredient_id")
-  babyFood     BabyFood   @relation(fields: [babyFoodId], references: [id])
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  id           Int @id @default(autoincrement())
+  babyFoodId   Int @map("baby_food_id")
+  ingredientId Int @map("ingredient_id")
+
+  // 関連
+  babyFood   BabyFood   @relation(fields: [babyFoodId], references: [id])
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
 
   @@unique([babyFoodId, ingredientId])
   @@map("baby_foods_ingredients")
