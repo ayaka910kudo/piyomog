@@ -5,6 +5,8 @@ import { validateRequest } from "./middleware";
 import {
   BabyFoodCreateRequestSchema,
   BabyFoodUpdateRequestSchema,
+  IngredientCreateRequestSchema,
+  IngredientUpdateRequestSchema,
 } from "./validation";
 const prisma = new PrismaClient();
 
@@ -58,24 +60,28 @@ app.get("/api/ingredients", async (req, res) => {
 });
 
 // 原材料追加
-app.post("/api/ingredients", async (req, res: any) => {
-  try {
-    const { name } = req.body;
+app.post(
+  "/api/ingredients",
+  validateRequest(IngredientCreateRequestSchema),
+  async (req, res: any) => {
+    try {
+      const { name } = req.body;
 
-    if (!name) {
-      return res.status(400).json({ error: "原材料名が必要です" });
+      if (!name) {
+        return res.status(400).json({ error: "原材料名が必要です" });
+      }
+
+      await prisma.ingredient.create({
+        data: { name: name },
+      });
+
+      res.status(201).json({ message: "原材料を追加しました" });
+    } catch (error) {
+      console.error("エラーの詳細:", error);
+      res.status(500).json({ error: "原材料の追加に失敗しました" });
     }
-
-    await prisma.ingredient.create({
-      data: { name: name },
-    });
-
-    res.status(201).json({ message: "原材料を追加しました" });
-  } catch (error) {
-    console.error("エラーの詳細:", error);
-    res.status(500).json({ error: "原材料の追加に失敗しました" });
   }
-});
+);
 
 // 原材料削除
 app.delete("/api/ingredients/:id", async (req, res: any) => {
@@ -102,38 +108,42 @@ app.delete("/api/ingredients/:id", async (req, res: any) => {
 });
 
 // 原材料名の修正
-app.patch("/api/ingredients/:id", async (req, res: any) => {
-  try {
-    const id = Number(req.params.id);
-    const { name } = req.body;
+app.patch(
+  "/api/ingredients/:id",
+  validateRequest(IngredientUpdateRequestSchema),
+  async (req, res: any) => {
+    try {
+      const id = Number(req.params.id);
+      const { name } = req.body;
 
-    if (!name) {
-      return res.status(400).json({ error: "原材料名が必要です" });
+      if (!name) {
+        return res.status(400).json({ error: "原材料名が必要です" });
+      }
+
+      // 更新する原材料が存在するか確認
+      const ingredient = await prisma.ingredient.findUnique({
+        where: { id },
+      });
+
+      if (!ingredient) {
+        return res
+          .status(404)
+          .json({ error: "指定された原材料が見つかりません" });
+      }
+
+      // 原材料名を更新
+      const updatedIngredient = await prisma.ingredient.update({
+        where: { id },
+        data: { name },
+      });
+
+      res.json(updatedIngredient);
+    } catch (error) {
+      console.error("エラーの詳細:", error);
+      res.status(500).json({ error: "原材料名の更新に失敗しました" });
     }
-
-    // 更新する原材料が存在するか確認
-    const ingredient = await prisma.ingredient.findUnique({
-      where: { id },
-    });
-
-    if (!ingredient) {
-      return res
-        .status(404)
-        .json({ error: "指定された原材料が見つかりません" });
-    }
-
-    // 原材料名を更新
-    const updatedIngredient = await prisma.ingredient.update({
-      where: { id },
-      data: { name },
-    });
-
-    res.json(updatedIngredient);
-  } catch (error) {
-    console.error("エラーの詳細:", error);
-    res.status(500).json({ error: "原材料名の更新に失敗しました" });
   }
-});
+);
 
 // 食べ物情報追加
 app.post(
