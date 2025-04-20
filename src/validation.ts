@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+export const idParamSchema = z.object({
+  params: z.object({
+    id: z.string().regex(/^\d+$/, "IDは数値で入力してください"),
+  }),
+});
+
 // 食べ物情報のバリデーション
 export const babyFoodNameSchema = z.string().min(1).max(50);
 export const ingredientIdsSchema = z.array(z.number());
@@ -48,7 +54,5 @@ export const IngredientUpdateRequestSchema = z.object({
   body: z.object({
     name: ingredientNameSchema,
   }),
-  params: z.object({
-    id: z.string().regex(/^\d+$/, "IDは数値で入力してください"),
-  }),
+  params: idParamSchema.shape.params,
 });
