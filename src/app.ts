@@ -5,6 +5,7 @@ import { validateRequest } from "./middleware";
 import {
   BabyFoodCreateRequestSchema,
   BabyFoodUpdateRequestSchema,
+  idParamSchema,
   IngredientCreateRequestSchema,
   IngredientUpdateRequestSchema,
 } from "./validation";
@@ -33,19 +34,23 @@ app.get("/api/baby-foods", async (req, res) => {
 });
 
 // 食べ物情報取得
-app.get("/api/baby-foods/:id", async (req, res) => {
-  try {
-    const babyFood = await prisma.babyFood.findUnique({
-      where: { id: Number(req.params.id) },
-      include: { ingredients: true },
-    });
+app.get(
+  "/api/baby-foods/:id",
+  validateRequest(idParamSchema),
+  async (req, res) => {
+    try {
+      const babyFood = await prisma.babyFood.findUnique({
+        where: { id: Number(req.params.id) },
+        include: { ingredients: true },
+      });
 
-    res.json(babyFood);
-  } catch (error) {
-    console.error("エラーの詳細:", error);
-    res.status(500).json({ error: "データの取得に失敗しました" });
+      res.json(babyFood);
+    } catch (error) {
+      console.error("エラーの詳細:", error);
+      res.status(500).json({ error: "データの取得に失敗しました" });
+    }
   }
-});
+);
 
 //  原材料一覧取得
 app.get("/api/ingredients", async (req, res) => {
@@ -84,28 +89,32 @@ app.post(
 );
 
 // 原材料削除
-app.delete("/api/ingredients/:id", async (req, res: any) => {
-  try {
-    const ingredient = await prisma.ingredient.findUnique({
-      where: { id: Number(req.params.id) },
-    });
+app.delete(
+  "/api/ingredients/:id",
+  validateRequest(idParamSchema),
+  async (req, res: any) => {
+    try {
+      const ingredient = await prisma.ingredient.findUnique({
+        where: { id: Number(req.params.id) },
+      });
 
-    if (!ingredient) {
-      return res
-        .status(404)
-        .json({ error: "指定された原材料が見つかりません" });
+      if (!ingredient) {
+        return res
+          .status(404)
+          .json({ error: "指定された原材料が見つかりません" });
+      }
+
+      await prisma.ingredient.delete({
+        where: { id: Number(req.params.id) },
+      });
+
+      res.status(200).json({ message: "原材料を削除しました" });
+    } catch (error) {
+      console.error("エラーの詳細:", error);
+      res.status(500).json({ error: "原材料の削除に失敗しました" });
     }
-
-    await prisma.ingredient.delete({
-      where: { id: Number(req.params.id) },
-    });
-
-    res.status(200).json({ message: "原材料を削除しました" });
-  } catch (error) {
-    console.error("エラーの詳細:", error);
-    res.status(500).json({ error: "原材料の削除に失敗しました" });
   }
-});
+);
 
 // 原材料名の修正
 app.patch(
@@ -246,32 +255,36 @@ app.patch(
 );
 
 // 食べ物情報の削除
-app.delete("/api/baby-foods/:id", async (req, res: any) => {
-  try {
-    const id = Number(req.params.id);
+app.delete(
+  "/api/baby-foods/:id",
+  validateRequest(idParamSchema),
+  async (req, res: any) => {
+    try {
+      const id = Number(req.params.id);
 
-    // 削除する食べ物が存在するか確認
-    const babyFood = await prisma.babyFood.findUnique({
-      where: { id },
-    });
+      // 削除する食べ物が存在するか確認
+      const babyFood = await prisma.babyFood.findUnique({
+        where: { id },
+      });
 
-    if (!babyFood) {
-      return res
-        .status(404)
-        .json({ error: "指定された食べ物が見つかりません" });
+      if (!babyFood) {
+        return res
+          .status(404)
+          .json({ error: "指定された食べ物が見つかりません" });
+      }
+
+      // 食べ物を削除
+      await prisma.babyFood.delete({
+        where: { id },
+      });
+
+      res.status(200).json({ message: "食べ物を削除しました" });
+    } catch (error) {
+      console.error("エラーの詳細:", error);
+      res.status(500).json({ error: "食べ物の削除に失敗しました" });
     }
-
-    // 食べ物を削除
-    await prisma.babyFood.delete({
-      where: { id },
-    });
-
-    res.status(200).json({ message: "食べ物を削除しました" });
-  } catch (error) {
-    console.error("エラーの詳細:", error);
-    res.status(500).json({ error: "食べ物の削除に失敗しました" });
   }
-});
+);
 
 app.listen(8000, () => {
   console.log("Example app listening on port 8000!");
