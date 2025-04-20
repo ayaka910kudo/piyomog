@@ -7,10 +7,27 @@ export const idParamSchema = z.object({
 });
 
 // 食べ物情報のバリデーション
-export const babyFoodNameSchema = z.string().min(1).max(50);
-export const ingredientIdsSchema = z.array(z.number());
-export const reactionStarsSchema = z.number().min(1).max(5);
-export const memoSchema = z.string().max(200).optional();
+export const babyFoodNameSchema = z
+  .string()
+  .min(1, "食べ物名は必須です")
+  .max(50, "食べ物名は50文字以内で入力してください")
+  .regex(/^[^\s].*[^\s]$/, "食べ物名の先頭と末尾にスペースは使用できません");
+
+export const ingredientIdsSchema = z
+  .array(z.number())
+  .min(1, "少なくとも1つの原材料を指定してください")
+  .max(10, "原材料は最大10個まで指定できます");
+
+export const reactionStarsSchema = z
+  .number()
+  .int("評価は整数で入力してください")
+  .min(1, "評価は1以上で入力してください")
+  .max(5, "評価は5以下で入力してください");
+
+export const memoSchema = z
+  .string()
+  .max(200, "メモは200文字以内で入力してください")
+  .optional();
 
 // 食べ物情報作成
 export const babyFoodCreateSchema = z.object({
@@ -34,6 +51,7 @@ export const babyFoodUpdateSchema = z.object({
 
 export const BabyFoodUpdateRequestSchema = z.object({
   body: babyFoodUpdateSchema,
+  params: idParamSchema.shape.params,
 });
 
 // 原材料名のバリデーション
