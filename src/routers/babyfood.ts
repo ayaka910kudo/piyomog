@@ -44,16 +44,6 @@ router.post(
     try {
       const { name, ingredientIds, reactionStars, memo } = req.body;
 
-      if (!name) {
-        return res.status(400).json({ error: "食べ物の名前が必要です" });
-      }
-
-      if (!Array.isArray(ingredientIds) || ingredientIds.length === 0) {
-        return res
-          .status(400)
-          .json({ error: "少なくとも1つの原材料を指定してください" });
-      }
-
       // 食べ物を作成し、関連する原材料も同時に設定
       const babyFood = await prisma.babyFood.create({
         data: {

@@ -29,10 +29,6 @@ router.post(
     try {
       const { name } = req.body;
 
-      if (!name) {
-        return res.status(400).json({ error: "原材料名が必要です" });
-      }
-
       await prisma.ingredient.create({
         data: { name: name },
       });
@@ -77,10 +73,6 @@ router.patch(
     try {
       const id = Number(req.params.id);
       const { name } = req.body;
-
-      if (!name) {
-        return res.status(400).json({ error: "原材料名が必要です" });
-      }
 
       // 更新する原材料が存在するか確認
       const ingredient = await prisma.ingredient.findUnique({
