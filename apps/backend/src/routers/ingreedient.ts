@@ -4,13 +4,13 @@ import { validateRequest } from "../middleware";
 import {
   IngredientCreateRequestSchema,
   IngredientUpdateRequestSchema,
-  idParamSchema,
-} from "../validation";
+} from "../validation/ingredient";
+import { idParamSchema } from "../validation/common";
 
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// 原材料一覧取得
+/** 原材料一覧取得 */
 router.get("/", async (req, res) => {
   try {
     const ingredients = await prisma.ingredient.findMany();
@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// 原材料追加
+/** 原材料追加 */
 router.post(
   "/",
   validateRequest(IngredientCreateRequestSchema),
@@ -41,7 +41,7 @@ router.post(
   }
 );
 
-// 原材料削除
+/** 原材料削除 */
 router.delete("/:id", validateRequest(idParamSchema), async (req, res: any) => {
   try {
     const ingredient = await prisma.ingredient.findUnique({
@@ -65,7 +65,7 @@ router.delete("/:id", validateRequest(idParamSchema), async (req, res: any) => {
   }
 });
 
-// 原材料名の修正
+/** 原材料名の修正 */
 router.patch(
   "/:id",
   validateRequest(IngredientUpdateRequestSchema),

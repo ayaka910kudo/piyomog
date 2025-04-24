@@ -4,13 +4,13 @@ import { validateRequest } from "../middleware";
 import {
   BabyFoodCreateRequestSchema,
   BabyFoodUpdateRequestSchema,
-  idParamSchema,
-} from "../validation";
+} from "../validation/babyFood";
+import { idParamSchema } from "../validation/common";
 
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// 食べ物一覧取得
+/** 食べ物一覧取得 */
 router.get("/", async (req, res) => {
   try {
     const babyFoods = await prisma.babyFood.findMany();
@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// 食べ物情報取得
+/** 食べ物情報取得 */
 router.get("/:id", validateRequest(idParamSchema), async (req, res) => {
   try {
     const babyFood = await prisma.babyFood.findUnique({
@@ -36,7 +36,7 @@ router.get("/:id", validateRequest(idParamSchema), async (req, res) => {
   }
 });
 
-// 食べ物情報追加
+/** 食べ物情報追加 */
 router.post(
   "/",
   validateRequest(BabyFoodCreateRequestSchema),
@@ -67,7 +67,7 @@ router.post(
   }
 );
 
-// 食べ物情報の編集
+/** 食べ物情報の編集 */
 router.patch(
   "/:id",
   validateRequest(BabyFoodUpdateRequestSchema),
@@ -126,7 +126,7 @@ router.patch(
   }
 );
 
-// 食べ物情報の削除
+/** 食べ物情報の削除 */
 router.delete("/:id", validateRequest(idParamSchema), async (req, res: any) => {
   try {
     const id = Number(req.params.id);

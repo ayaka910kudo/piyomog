@@ -1,4 +1,4 @@
-import { babyFoodNameSchema } from "./validation";
+import { babyFoodNameSchema } from "./babyFood";
 
 describe("Validation", () => {
   describe("babyFoodNameSchema", () => {
