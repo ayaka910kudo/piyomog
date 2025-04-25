@@ -32,6 +32,21 @@ describe("ingredientIdsSchema", () => {
       );
     }
   });
+
+  it("重複する原材料IDを含む配列を検証できること", () => {
+    const result = ingredientIdsSchema.safeParse([1, 1, 2, 2, 3]);
+    expect(result.success).toBe(true);
+  });
+
+  it("0以下の原材料IDを含む配列を拒否すること", () => {
+    const result = ingredientIdsSchema.safeParse([0, 1, 2]);
+    expect(result.success).toBe(false);
+  });
+
+  it("小数点を含む原材料IDを含む配列を拒否すること", () => {
+    const result = ingredientIdsSchema.safeParse([1.5, 2, 3]);
+    expect(result.success).toBe(false);
+  });
 });
 
 describe("ingredientNameSchema", () => {
@@ -57,6 +72,21 @@ describe("ingredientNameSchema", () => {
       );
     }
   });
+
+  it("先頭にスペースがある原材料名を拒否すること", () => {
+    const result = ingredientNameSchema.safeParse(" トマト");
+    expect(result.success).toBe(false);
+  });
+
+  it("末尾にスペースがある原材料名を拒否すること", () => {
+    const result = ingredientNameSchema.safeParse("トマト ");
+    expect(result.success).toBe(false);
+  });
+
+  it("全角スペースを含む原材料名を検証できること", () => {
+    const result = ingredientNameSchema.safeParse("トマト　ジュース");
+    expect(result.success).toBe(true);
+  });
 });
 
 describe("IngredientCreateRequestSchema", () => {
@@ -78,6 +108,13 @@ describe("IngredientCreateRequestSchema", () => {
 
   it("bodyが欠落しているリクエストを拒否すること", () => {
     const result = IngredientCreateRequestSchema.safeParse({});
+    expect(result.success).toBe(false);
+  });
+
+  it("bodyがnullのリクエストを拒否すること", () => {
+    const result = IngredientCreateRequestSchema.safeParse({
+      body: null,
+    });
     expect(result.success).toBe(false);
   });
 });
@@ -116,6 +153,16 @@ describe("IngredientUpdateRequestSchema", () => {
 
   it("bodyが欠落している更新リクエストを拒否すること", () => {
     const result = IngredientUpdateRequestSchema.safeParse({
+      params: {
+        id: "123",
+      },
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("bodyがnullの更新リクエストを拒否すること", () => {
+    const result = IngredientUpdateRequestSchema.safeParse({
+      body: null,
       params: {
         id: "123",
       },
