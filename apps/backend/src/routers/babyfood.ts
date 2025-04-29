@@ -98,14 +98,15 @@ router.patch(
       if (memo !== undefined) updateData.memo = memo;
 
       // 原材料の更新がある場合
-      if (
-        ingredientIds &&
-        Array.isArray(ingredientIds) &&
-        ingredientIds.length > 0
-      ) {
+      if (ingredientIds !== undefined) {
+        // 既存の関連をすべて解除し、新しい関連を設定
         updateData.ingredients = {
-          set: [], // 一旦すべての関連を解除
-          connect: ingredientIds.map((id: number) => ({ id })), // 新しい関連を設定
+          deleteMany: {}, // すべての関連を削除
+          create: ingredientIds.map((id: number) => ({
+            ingredient: {
+              connect: { id },
+            },
+          })),
         };
       }
 

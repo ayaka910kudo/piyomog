@@ -73,15 +73,12 @@ export default function BabyFoodsPage() {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={4}
-      >
+      <Box display="flex" justifyContent="center" alignItems="center" mb={4}>
         <Typography variant="h4" component="h1">
           食べ物一覧
         </Typography>
+      </Box>
+      <Box display="flex" justifyContent="flex-end" alignItems="center" mb={4}>
         <Button
           variant="contained"
           color="primary"
@@ -134,7 +131,7 @@ export default function BabyFoodsPage() {
                     size="small"
                     color="primary"
                     component={Link}
-                    href={`/baby-foods/${food.id}`}
+                    href={`/babyFoods/${food.id}`}
                   >
                     詳細
                   </Button>
