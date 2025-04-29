@@ -43,6 +43,7 @@ export default function BabyFoodDetailPage({
         const response = await axios.get(
           `/api/baby-foods/${resolvedParams.id}`
         );
+        console.log("response.data", response.data);
         setBabyFood(response.data);
       } catch (err) {
         setError(

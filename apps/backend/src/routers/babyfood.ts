@@ -22,14 +22,35 @@ router.get("/", async (req, res) => {
 });
 
 /** 食べ物情報取得 */
-router.get("/:id", validateRequest(idParamSchema), async (req, res) => {
+router.get("/:id", validateRequest(idParamSchema), async (req, res: any) => {
   try {
     const babyFood = await prisma.babyFood.findUnique({
       where: { id: Number(req.params.id) },
-      include: { ingredients: true },
+      include: {
+        ingredients: {
+          include: {
+            ingredient: true,
+          },
+        },
+      },
     });
 
-    res.json(babyFood);
+    if (!babyFood) {
+      return res
+        .status(404)
+        .json({ error: "指定された食べ物が見つかりません" });
+    }
+
+    // レスポンスの形式を整形
+    const formattedResponse = {
+      ...babyFood,
+      ingredients: babyFood.ingredients.map((item) => ({
+        id: item.ingredient.id,
+        name: item.ingredient.name,
+      })),
+    };
+
+    res.json(formattedResponse);
   } catch (error) {
     console.error("エラーの詳細:", error);
     res.status(500).json({ error: "データの取得に失敗しました" });
