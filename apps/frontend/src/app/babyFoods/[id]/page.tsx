@@ -8,7 +8,6 @@ import {
   Alert,
   Typography,
   Paper,
-  Grid,
   Chip,
   Rating,
 } from "@mui/material";
@@ -85,8 +84,15 @@ export default function BabyFoodDetailPage({
           {babyFood?.name}
         </Typography>
 
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+            gap: 3,
+            mt: 3,
+          }}
+        >
+          <Box>
             <Box sx={{ mb: 3 }}>
               <Typography variant="h6" gutterBottom>
                 反応
@@ -107,38 +113,25 @@ export default function BabyFoodDetailPage({
                 {babyFood?.memo || "メモはありません"}
               </Typography>
             </Box>
-          </Grid>
+          </Box>
 
-          <Grid item xs={12} md={6}>
-            <Box>
-              <Typography variant="h6" gutterBottom>
-                使用食材
-              </Typography>
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                {babyFood?.ingredients.map((ingredient) => (
-                  <Chip
-                    key={ingredient.id}
-                    label={ingredient.name}
-                    color="primary"
-                    variant="outlined"
-                  />
-                ))}
-              </Box>
+          <Box>
+            <Typography variant="h6" gutterBottom>
+              使用食材
+            </Typography>
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+              {babyFood?.ingredients.map((ingredient) => (
+                <Chip
+                  key={ingredient.id}
+                  label={ingredient.name}
+                  color="primary"
+                  variant="outlined"
+                />
+              ))}
             </Box>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Paper>
     </Container>
   );
 }
-
-// const babyFoodDetail = ({ params }: { params: { id: string } }) => {
-//     return (
-//         <>
-//             <div>babyFoodDetail</div>
-//             <div>
-//                 <p>id: {params.id}</p>
-//             </div>
-//         </>
-//     );
-// };
