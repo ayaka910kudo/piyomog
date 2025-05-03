@@ -30,10 +30,35 @@ interface Ingredient {
   name: string;
 }
 
+interface ErrorDialogProps {
+  open: boolean;
+  onClose: () => void;
+  message: string;
+}
+
+function ErrorDialog({ open, onClose, message }: ErrorDialogProps) {
+  console.log("ErrorDialog rendering with message:", message);
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>エラー</DialogTitle>
+      <DialogContent>
+        <Typography>{message}</Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} variant="contained" color="primary">
+          OK
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
 export default function IngredientsPage() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedIngredient, setSelectedIngredient] =
     useState<Ingredient | null>(null);
@@ -66,13 +91,34 @@ export default function IngredientsPage() {
     if (!confirm("この原材料を削除してもよろしいですか？")) return;
 
     try {
-      await axios.delete(`/api/ingredients/${id}`);
-      fetchIngredients();
+      const response = await axios.delete(`/api/ingredients/${id}`);
+      if (response.data.message) {
+        fetchIngredients();
+      }
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "原材料の削除に失敗しました"
-      );
+      if (axios.isAxiosError(err) && err.response) {
+        const errorData = err.response.data;
+        if (errorData.usedIn) {
+          const usedInList = errorData.usedIn
+            .map((food: { name: string }) => food.name)
+            .join("、");
+          setErrorMessage(
+            `この原材料は以下の離乳食で使用されているため削除できません：${usedInList}`
+          );
+        } else {
+          setErrorMessage("原材料の削除に失敗しました");
+        }
+        setErrorDialogOpen(true);
+      } else {
+        setErrorMessage("原材料の削除に失敗しました");
+        setErrorDialogOpen(true);
+      }
     }
+  };
+
+  const handleErrorDialogClose = () => {
+    setErrorDialogOpen(false);
+    fetchIngredients();
   };
 
   const handleEditSubmit = async () => {
@@ -85,9 +131,10 @@ export default function IngredientsPage() {
       setEditDialogOpen(false);
       fetchIngredients();
     } catch (err) {
-      setError(
+      setErrorMessage(
         err instanceof Error ? err.message : "原材料の更新に失敗しました"
       );
+      setErrorDialogOpen(true);
     }
   };
 
@@ -177,6 +224,12 @@ export default function IngredientsPage() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <ErrorDialog
+        open={errorDialogOpen}
+        onClose={handleErrorDialogClose}
+        message={errorMessage}
+      />
     </Container>
   );
 }
