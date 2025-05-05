@@ -72,7 +72,11 @@ router.post(
           reactionStars: reactionStars ?? 0,
           memo: memo ?? "",
           ingredients: {
-            connect: ingredientIds.map((id: number) => ({ id: id })),
+            create: ingredientIds.map((id: number) => ({
+              ingredient: {
+                connect: { id: id },
+              },
+            })),
           },
         },
         include: {
