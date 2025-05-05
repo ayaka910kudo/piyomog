@@ -16,3 +16,8 @@ export async function GET() {
     );
   }
 }
+export async function DELETE(request: Request) {
+  const { id } = await request.json();
+  const response = await axios.delete(`${API_BASE_URL}/api/ingredients/${id}`);
+  return NextResponse.json(response.data);
+}
