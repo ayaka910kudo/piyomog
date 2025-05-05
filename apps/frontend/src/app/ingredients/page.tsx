@@ -22,7 +22,11 @@ import {
   Button,
   TextField,
 } from "@mui/material";
-import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import {
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Add as AddIcon,
+} from "@mui/icons-material";
 import axios from "axios";
 
 interface Ingredient {
@@ -60,9 +64,11 @@ export default function IngredientsPage() {
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [selectedIngredient, setSelectedIngredient] =
     useState<Ingredient | null>(null);
   const [newName, setNewName] = useState("");
+  const [createName, setCreateName] = useState("");
 
   useEffect(() => {
     fetchIngredients();
@@ -138,6 +144,28 @@ export default function IngredientsPage() {
     }
   };
 
+  const handleCreateClick = () => {
+    setCreateName("");
+    setCreateDialogOpen(true);
+  };
+
+  const handleCreateSubmit = async () => {
+    try {
+      await axios.post("/api/ingredients", {
+        body: {
+          name: createName,
+        },
+      });
+      setCreateDialogOpen(false);
+      fetchIngredients();
+    } catch (err) {
+      setErrorMessage(
+        err instanceof Error ? err.message : "原材料の作成に失敗しました"
+      );
+      setErrorDialogOpen(true);
+    }
+  };
+
   if (loading) {
     return (
       <Box
@@ -162,9 +190,24 @@ export default function IngredientsPage() {
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Paper elevation={3} sx={{ p: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          原材料一覧
-        </Typography>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={3}
+        >
+          <Typography variant="h4" component="h1">
+            原材料一覧
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+            onClick={handleCreateClick}
+          >
+            新規作成
+          </Button>
+        </Box>
 
         <TableContainer>
           <Table>
@@ -221,6 +264,34 @@ export default function IngredientsPage() {
             color="primary"
           >
             保存
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={createDialogOpen}
+        onClose={() => setCreateDialogOpen(false)}
+      >
+        <DialogTitle>原材料の新規作成</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="原材料名"
+            fullWidth
+            value={createName}
+            onChange={(e) => setCreateName(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setCreateDialogOpen(false)}>キャンセル</Button>
+          <Button
+            onClick={handleCreateSubmit}
+            variant="contained"
+            color="primary"
+            disabled={!createName.trim()}
+          >
+            作成
           </Button>
         </DialogActions>
       </Dialog>

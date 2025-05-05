@@ -21,3 +21,26 @@ export async function DELETE(request: Request) {
   const response = await axios.delete(`${API_BASE_URL}/api/ingredients/${id}`);
   return NextResponse.json(response.data);
 }
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.text();
+    if (!body) {
+      return NextResponse.json(
+        { error: "Request body is empty" },
+        { status: 400 }
+      );
+    }
+    const { name } = JSON.parse(body);
+    const response = await axios.post(`${API_BASE_URL}/api/ingredients`, {
+      name,
+    });
+    return NextResponse.json(response.data);
+  } catch (error) {
+    console.error("Error creating ingredient:", error);
+    return NextResponse.json(
+      { error: "Failed to create ingredient" },
+      { status: 500 }
+    );
+  }
+}
