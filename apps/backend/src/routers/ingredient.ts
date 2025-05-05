@@ -57,27 +57,27 @@ router.delete("/:id", validateRequest(idParamSchema), async (req, res: any) => {
         .json({ error: "指定された原材料が見つかりません" });
     }
 
-    // 原材料が離乳食で使用されているか確認
-    // const usedInBabyFoods = await prisma.babyFood.findMany({
-    //   where: {
-    //     ingredients: {
-    //       some: {
-    //         ingredientId: ingredientId,
+    //     // 原材料が離乳食で使用されているか確認
+    //     const usedInBabyFoods = await prisma.babyFood.findMany({
+    //       where: {
+    //         ingredients: {
+    //           some: {
+    //             ingredientId: ingredientId,
+    //           },
+    //         },
     //       },
-    //     },
-    //   },
-    //   select: {
-    //     id: true,
-    //     name: true,
-    //   },
-    // });
+    //       select: {
+    //         id: true,
+    //         name: true,
+    //       },
+    //     });
 
-    // if (usedInBabyFoods.length > 0) {
-    //   return res.status(400).json({
-    //     error: "この原材料は使用されているため削除できません",
-    //     usedIn: usedInBabyFoods,
-    //   });
-    // }
+    //     if (usedInBabyFoods.length > 0) {
+    //       return res.status(400).json({
+    //         error: "この原材料は使用されているため削除できません",
+    //         usedIn: usedInBabyFoods,
+    //       });
+    //     }
 
     // 使用されていない場合は削除を実行
     await prisma.ingredient.delete({

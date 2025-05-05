@@ -1,6 +1,6 @@
 import express from "express";
 import babyFoodRouter from "./routers/babyfood";
-import ingredientRouter from "./routers/ingreedient";
+import ingredientRouter from "./routers/ingredient";
 
 // Expressの初期化
 const app = express();
