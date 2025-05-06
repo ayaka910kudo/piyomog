@@ -38,6 +38,12 @@ export async function POST(request: Request) {
     return NextResponse.json(response.data);
   } catch (error) {
     console.error("Error creating ingredient:", error);
+    if (axios.isAxiosError(error) && error.response) {
+      return NextResponse.json(
+        { error: error.response.data.error || "Failed to create ingredient" },
+        { status: error.response.status }
+      );
+    }
     return NextResponse.json(
       { error: "Failed to create ingredient" },
       { status: 500 }

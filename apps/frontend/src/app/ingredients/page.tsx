@@ -151,17 +151,21 @@ export default function IngredientsPage() {
 
   const handleCreateSubmit = async () => {
     try {
-      await axios.post("/api/ingredients", {
-        body: {
-          name: createName,
-        },
+      const response = await axios.post("/api/ingredients", {
+        name: createName,
       });
-      setCreateDialogOpen(false);
-      fetchIngredients();
+      if (response.data) {
+        setCreateDialogOpen(false);
+        fetchIngredients();
+      }
     } catch (err) {
-      setErrorMessage(
-        err instanceof Error ? err.message : "原材料の作成に失敗しました"
-      );
+      if (axios.isAxiosError(err) && err.response) {
+        setErrorMessage(
+          err.response.data.error || "原材料の作成に失敗しました"
+        );
+      } else {
+        setErrorMessage("原材料の作成に失敗しました");
+      }
       setErrorDialogOpen(true);
     }
   };
