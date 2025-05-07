@@ -17,10 +17,8 @@ import {
   DialogActions,
   TextField,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Chip,
+  Autocomplete,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
@@ -230,35 +228,33 @@ export default function BabyFoodsPage() {
             }
           />
           <FormControl fullWidth margin="dense">
-            <InputLabel>原材料</InputLabel>
-            <Select
+            <Autocomplete
               multiple
-              value={newBabyFood.ingredientIds}
-              onChange={(e) =>
+              options={ingredients}
+              getOptionLabel={(option) => option.name}
+              value={ingredients.filter((ingredient) =>
+                newBabyFood.ingredientIds.includes(ingredient.id)
+              )}
+              onChange={(_, newValue) => {
                 setNewBabyFood({
                   ...newBabyFood,
-                  ingredientIds: e.target.value as number[],
+                  ingredientIds: newValue.map((ingredient) => ingredient.id),
+                });
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="原材料"
+                  placeholder="原材料を検索"
+                />
+              )}
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => {
+                  const { key, ...chipProps } = getTagProps({ index });
+                  return <Chip key={key} label={option.name} {...chipProps} />;
                 })
               }
-              renderValue={(selected) => (
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {selected.map((value) => (
-                    <Chip
-                      key={value}
-                      label={
-                        ingredients.find((ing) => ing.id === value)?.name || ""
-                      }
-                    />
-                  ))}
-                </Box>
-              )}
-            >
-              {ingredients.map((ingredient) => (
-                <MenuItem key={ingredient.id} value={ingredient.id}>
-                  {ingredient.name}
-                </MenuItem>
-              ))}
-            </Select>
+            />
           </FormControl>
         </DialogContent>
         <DialogActions>
