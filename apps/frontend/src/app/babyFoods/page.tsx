@@ -11,6 +11,16 @@ import {
   Rating,
   CircularProgress,
   Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Chip,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
@@ -28,16 +38,33 @@ interface BabyFood {
   }[];
 }
 
+interface Ingredient {
+  id: number;
+  name: string;
+}
+
 export default function BabyFoodsPage() {
   const [babyFoods, setBabyFoods] = useState<BabyFood[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [newBabyFood, setNewBabyFood] = useState({
+    name: "",
+    reactionStars: 0,
+    memo: "",
+    ingredientIds: [] as number[],
+  });
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
 
   useEffect(() => {
-    const fetchBabyFoods = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get("/api/baby-foods");
-        setBabyFoods(response.data);
+        const [babyFoodsResponse, ingredientsResponse] = await Promise.all([
+          axios.get("/api/baby-foods"),
+          axios.get("/api/ingredients"),
+        ]);
+        setBabyFoods(babyFoodsResponse.data);
+        setIngredients(ingredientsResponse.data);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "予期せぬエラーが発生しました"
@@ -47,8 +74,29 @@ export default function BabyFoodsPage() {
       }
     };
 
-    fetchBabyFoods();
+    fetchData();
   }, []);
+
+  const handleCreateClick = () => {
+    setNewBabyFood({
+      name: "",
+      reactionStars: 0,
+      memo: "",
+      ingredientIds: [],
+    });
+    setCreateDialogOpen(true);
+  };
+
+  const handleCreateSubmit = async () => {
+    try {
+      await axios.post("/api/baby-foods", newBabyFood);
+      setCreateDialogOpen(false);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "食べ物の作成に失敗しました"
+      );
+    }
+  };
 
   if (loading) {
     return (
@@ -83,8 +131,7 @@ export default function BabyFoodsPage() {
           variant="contained"
           color="primary"
           startIcon={<AddIcon />}
-          component={Link}
-          href="/baby-foods/new"
+          onClick={handleCreateClick}
         >
           新規登録
         </Button>
@@ -141,6 +188,89 @@ export default function BabyFoodsPage() {
           ))}
         </Box>
       )}
+
+      <Dialog
+        open={createDialogOpen}
+        onClose={() => setCreateDialogOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>食べ物の新規登録</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="食べ物名"
+            fullWidth
+            value={newBabyFood.name}
+            onChange={(e) =>
+              setNewBabyFood({ ...newBabyFood, name: e.target.value })
+            }
+          />
+          <Box sx={{ mt: 2 }}>
+            <Typography component="legend">反応</Typography>
+            <Rating
+              value={newBabyFood.reactionStars}
+              onChange={(_, value) =>
+                setNewBabyFood({ ...newBabyFood, reactionStars: value || 0 })
+              }
+            />
+          </Box>
+          <TextField
+            margin="dense"
+            label="メモ"
+            fullWidth
+            multiline
+            rows={2}
+            value={newBabyFood.memo}
+            onChange={(e) =>
+              setNewBabyFood({ ...newBabyFood, memo: e.target.value })
+            }
+          />
+          <FormControl fullWidth margin="dense">
+            <InputLabel>原材料</InputLabel>
+            <Select
+              multiple
+              value={newBabyFood.ingredientIds}
+              onChange={(e) =>
+                setNewBabyFood({
+                  ...newBabyFood,
+                  ingredientIds: e.target.value as number[],
+                })
+              }
+              renderValue={(selected) => (
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {selected.map((value) => (
+                    <Chip
+                      key={value}
+                      label={
+                        ingredients.find((ing) => ing.id === value)?.name || ""
+                      }
+                    />
+                  ))}
+                </Box>
+              )}
+            >
+              {ingredients.map((ingredient) => (
+                <MenuItem key={ingredient.id} value={ingredient.id}>
+                  {ingredient.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setCreateDialogOpen(false)}>キャンセル</Button>
+          <Button
+            onClick={handleCreateSubmit}
+            variant="contained"
+            color="primary"
+            disabled={!newBabyFood.name.trim()}
+          >
+            作成
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
