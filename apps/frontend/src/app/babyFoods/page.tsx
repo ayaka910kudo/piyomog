@@ -55,6 +55,7 @@ export default function BabyFoodsPage() {
     ingredientIds: [] as number[],
   });
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,7 +76,7 @@ export default function BabyFoodsPage() {
     };
 
     fetchData();
-  }, []);
+  }, [refreshTrigger]);
 
   const handleCreateClick = () => {
     setNewBabyFood({
@@ -91,6 +92,7 @@ export default function BabyFoodsPage() {
     try {
       await axios.post("/api/baby-foods", newBabyFood);
       setCreateDialogOpen(false);
+      setRefreshTrigger((prev) => prev + 1);
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "食べ物の作成に失敗しました"
