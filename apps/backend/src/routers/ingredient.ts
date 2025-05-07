@@ -29,11 +29,11 @@ router.post(
     try {
       const { name } = req.body;
 
-      await prisma.ingredient.create({
-        data: { name: name },
+      const ingredient = await prisma.ingredient.create({
+        data: { name },
       });
 
-      res.status(201).json({ message: "原材料を追加しました" });
+      res.status(201).json(ingredient);
     } catch (error) {
       console.error("エラーの詳細:", error);
       res.status(500).json({ error: "原材料の追加に失敗しました" });

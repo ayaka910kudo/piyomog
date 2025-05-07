@@ -9,7 +9,7 @@ export const ingredientIdsSchema = z
 
 /** 原材料名のバリデーション */
 export const ingredientNameSchema = z
-  .string({ message: "数字は使用できません" })
+  .string()
   .min(1, "原材料名は必須です")
   .max(30, "原材料名は30文字以内で入力してください")
   .regex(/^[^\s].*[^\s]$/, "原材料名の先頭と末尾にスペースは使用できません");
