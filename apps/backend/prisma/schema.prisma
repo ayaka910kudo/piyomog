@@ -39,7 +39,7 @@ model BabyFoodIngredient {
   ingredientId Int @map("ingredient_id")
 
   // 関連
-  babyFood   BabyFood   @relation(fields: [babyFoodId], references: [id])
+  babyFood   BabyFood   @relation(fields: [babyFoodId], references: [id], onDelete: Cascade)
   ingredient Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
 
   @@unique([babyFoodId, ingredientId])

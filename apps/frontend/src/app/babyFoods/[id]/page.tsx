@@ -10,9 +10,16 @@ import {
   Paper,
   Chip,
   Rating,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import axios from "axios";
 import { use } from "react";
+import { useRouter } from "next/navigation";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 // 食べ物の型定義
 interface BabyFood {
@@ -31,10 +38,12 @@ export default function BabyFoodDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const router = useRouter();
   const resolvedParams = use(params);
   const [babyFood, setBabyFood] = useState<BabyFood>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchBabyFoods = async () => {
@@ -55,6 +64,18 @@ export default function BabyFoodDetailPage({
 
     fetchBabyFoods();
   }, [resolvedParams.id]);
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`/api/baby-foods/${resolvedParams.id}`);
+      console.log("削除しました");
+      router.push("/babyFoods");
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "削除中にエラーが発生しました"
+      );
+    }
+  };
 
   if (loading) {
     return (
@@ -79,7 +100,18 @@ export default function BabyFoodDetailPage({
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Paper elevation={3} sx={{ p: 4 }}>
+      <Paper elevation={3} sx={{ p: 4, position: "relative" }}>
+        <Box sx={{ position: "absolute", top: 16, right: 16 }}>
+          <Button
+            variant="outlined"
+            color="error"
+            startIcon={<DeleteIcon />}
+            onClick={() => setDeleteDialogOpen(true)}
+          >
+            削除
+          </Button>
+        </Box>
+
         <Typography variant="h4" component="h1" gutterBottom>
           {babyFood?.name}
         </Typography>
@@ -132,6 +164,25 @@ export default function BabyFoodDetailPage({
           </Box>
         </Box>
       </Paper>
+
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+      >
+        <DialogTitle>食べ物の削除</DialogTitle>
+        <DialogContent>
+          <Typography>
+            「{babyFood?.name}」を削除してもよろしいですか？
+            この操作は取り消せません。
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)}>キャンセル</Button>
+          <Button onClick={handleDelete} color="error" variant="contained">
+            削除
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
