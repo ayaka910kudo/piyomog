@@ -16,3 +16,23 @@ export async function GET() {
     );
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const response = await axios.post(`${API_BASE_URL}/api/baby-foods`, body);
+    return NextResponse.json(response.data);
+  } catch (error) {
+    console.error("Error creating baby food:", error);
+    if (axios.isAxiosError(error) && error.response) {
+      return NextResponse.json(
+        { error: error.response.data.error || "Failed to create baby food" },
+        { status: error.response.status }
+      );
+    }
+    return NextResponse.json(
+      { error: "Failed to create baby food" },
+      { status: 500 }
+    );
+  }
+}
