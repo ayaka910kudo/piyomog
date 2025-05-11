@@ -34,3 +34,34 @@ export async function GET(
     );
   }
 }
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    console.log("DELETE request received with params:", params);
+    const { id } = params;
+
+    if (!id) {
+      console.log("Error: ID is missing");
+      return NextResponse.json({ error: "ID is required" }, { status: 400 });
+    }
+
+    console.log(`Attempting to delete baby food with ID: ${id}`);
+    const response = await axios.delete(`${API_BASE_URL}/api/baby-foods/${id}`);
+    console.log("Delete response:", response.data);
+    return NextResponse.json(response.data);
+  } catch (error) {
+    console.error("Error deleting baby food:", error);
+
+    if (axios.isAxiosError(error) && error.response) {
+      return NextResponse.json(error.response.data);
+    }
+
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
