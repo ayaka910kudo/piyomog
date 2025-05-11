@@ -72,7 +72,7 @@ export default function BabyFoodEditPage({
     if (!babyFood) return;
 
     try {
-      await axios.put(`/api/baby-foods/${resolvedParams.id}`, {
+      await axios.patch(`/api/baby-foods/${resolvedParams.id}`, {
         name: babyFood.name,
         reactionStars: babyFood.reactionStars,
         memo: babyFood.memo,
@@ -191,13 +191,10 @@ export default function BabyFoodEditPage({
                 />
               )}
               renderTags={(value, getTagProps) =>
-                value.map((option, index) => (
-                  <Chip
-                    key={option.id}
-                    label={option.name}
-                    {...getTagProps({ index })}
-                  />
-                ))
+                value.map((option, index) => {
+                  const { key, ...chipProps } = getTagProps({ index });
+                  return <Chip key={key} label={option.name} {...chipProps} />;
+                })
               }
             />
           </Box>
