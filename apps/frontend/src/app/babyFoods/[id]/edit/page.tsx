@@ -200,7 +200,15 @@ export default function BabyFoodEditPage({
           </Box>
         </Box>
 
-        <Box sx={{ mt: 4, display: "flex", justifyContent: "flex-end" }}>
+        <Box
+          sx={{ mt: 4, display: "flex", justifyContent: "flex-end", gap: 2 }}
+        >
+          <Button
+            variant="outlined"
+            onClick={() => router.push(`/babyFoods/${resolvedParams.id}`)}
+          >
+            キャンセル
+          </Button>
           <Button
             variant="contained"
             color="primary"
