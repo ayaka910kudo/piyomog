@@ -47,7 +47,7 @@ export default function BabyFoodDetailPage({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
-    const fetchBabyFoods = async () => {
+    const fetchBabyFood = async () => {
       try {
         const response = await axios.get(
           `/api/baby-foods/${resolvedParams.id}`
@@ -63,7 +63,7 @@ export default function BabyFoodDetailPage({
       }
     };
 
-    fetchBabyFoods();
+    fetchBabyFood();
   }, [resolvedParams.id]);
 
   const handleDelete = async () => {
