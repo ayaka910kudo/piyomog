@@ -35,6 +35,44 @@ export async function GET(
   }
 }
 
+export async function PATCH(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const { id } = params;
+
+    if (!id) {
+      return NextResponse.json({ error: "ID is required" }, { status: 400 });
+    }
+
+    // リクエストボディを取得
+    const body = await request.json();
+    const { name, reactionStars, memo, ingredientIds } = body;
+
+    // バックエンドAPIにPATCHリクエストを送信
+    const response = await axios.patch(`${API_BASE_URL}/api/baby-foods/${id}`, {
+      name,
+      reactionStars,
+      memo,
+      ingredientIds,
+    });
+
+    return NextResponse.json(response.data);
+  } catch (error) {
+    console.error("Error updating baby food:", error);
+
+    if (axios.isAxiosError(error) && error.response) {
+      return NextResponse.json(error.response.data);
+    }
+
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }

@@ -20,6 +20,7 @@ import axios from "axios";
 import { use } from "react";
 import { useRouter } from "next/navigation";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 // 食べ物の型定義
 interface BabyFood {
@@ -46,7 +47,7 @@ export default function BabyFoodDetailPage({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
-    const fetchBabyFoods = async () => {
+    const fetchBabyFood = async () => {
       try {
         const response = await axios.get(
           `/api/baby-foods/${resolvedParams.id}`
@@ -62,7 +63,7 @@ export default function BabyFoodDetailPage({
       }
     };
 
-    fetchBabyFoods();
+    fetchBabyFood();
   }, [resolvedParams.id]);
 
   const handleDelete = async () => {
@@ -101,7 +102,23 @@ export default function BabyFoodDetailPage({
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Paper elevation={3} sx={{ p: 4, position: "relative" }}>
-        <Box sx={{ position: "absolute", top: 16, right: 16 }}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: 16,
+            right: 16,
+            display: "flex",
+            gap: 2,
+          }}
+        >
+          <Button
+            variant="outlined"
+            color="primary"
+            startIcon={<EditIcon />}
+            onClick={() => router.push(`/babyFoods/${resolvedParams.id}/edit`)}
+          >
+            編集
+          </Button>
           <Button
             variant="outlined"
             color="error"
