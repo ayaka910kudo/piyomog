@@ -58,12 +58,16 @@ export async function PATCH(
       ingredientIds,
     });
 
-    return NextResponse.json(response.data);
+    // バックエンドのステータスコードを転送
+    return NextResponse.json(response.data, { status: response.status });
   } catch (error) {
     console.error("Error updating baby food:", error);
 
     if (axios.isAxiosError(error) && error.response) {
-      return NextResponse.json(error.response.data);
+      // エラー時のステータスコードも転送
+      return NextResponse.json(error.response.data, {
+        status: error.response.status,
+      });
     }
 
     return NextResponse.json(
