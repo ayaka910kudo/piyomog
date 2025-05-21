@@ -21,9 +21,14 @@ export async function PATCH(
       `${API_BASE_URL}/api/ingredients/${id}`,
       body
     );
-    return NextResponse.json(response.data);
+    return NextResponse.json(response.data, { status: response.status });
   } catch (error) {
     console.error("Error updating ingredient:", error);
+    if (axios.isAxiosError(error) && error.response) {
+      return NextResponse.json(error.response.data, {
+        status: error.response.status,
+      });
+    }
     return NextResponse.json(
       { error: "Failed to update ingredient" },
       { status: 500 }
@@ -46,9 +51,14 @@ export async function DELETE(
     const response = await axios.delete(
       `${API_BASE_URL}/api/ingredients/${id}`
     );
-    return NextResponse.json(response.data);
+    return NextResponse.json(response.data, { status: response.status });
   } catch (error) {
     console.error("Error deleting ingredient:", error);
+    if (axios.isAxiosError(error) && error.response) {
+      return NextResponse.json(error.response.data, {
+        status: error.response.status,
+      });
+    }
     return NextResponse.json(
       { error: "Failed to delete ingredient" },
       { status: 500 }
