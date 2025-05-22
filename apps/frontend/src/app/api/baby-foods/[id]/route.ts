@@ -20,12 +20,14 @@ export async function GET(
     }
 
     const response = await axios.get(`${API_BASE_URL}/api/baby-foods/${id}`);
-    return NextResponse.json(response.data);
+    return NextResponse.json(response.data, { status: response.status });
   } catch (error) {
     console.error("Error fetching baby food:", error);
 
     if (axios.isAxiosError(error) && error.response) {
-      return NextResponse.json(error.response.data);
+      return NextResponse.json(error.response.data, {
+        status: error.response.status,
+      });
     }
 
     return NextResponse.json(
@@ -58,12 +60,16 @@ export async function PATCH(
       ingredientIds,
     });
 
-    return NextResponse.json(response.data);
+    // バックエンドのステータスコードを転送
+    return NextResponse.json(response.data, { status: response.status });
   } catch (error) {
     console.error("Error updating baby food:", error);
 
     if (axios.isAxiosError(error) && error.response) {
-      return NextResponse.json(error.response.data);
+      // エラー時のステータスコードも転送
+      return NextResponse.json(error.response.data, {
+        status: error.response.status,
+      });
     }
 
     return NextResponse.json(
@@ -89,12 +95,14 @@ export async function DELETE(
     console.log(`Attempting to delete baby food with ID: ${id}`);
     const response = await axios.delete(`${API_BASE_URL}/api/baby-foods/${id}`);
     console.log("Delete response:", response.data);
-    return NextResponse.json(response.data);
+    return NextResponse.json(response.data, { status: response.status });
   } catch (error) {
     console.error("Error deleting baby food:", error);
 
     if (axios.isAxiosError(error) && error.response) {
-      return NextResponse.json(error.response.data);
+      return NextResponse.json(error.response.data, {
+        status: error.response.status,
+      });
     }
 
     return NextResponse.json(
