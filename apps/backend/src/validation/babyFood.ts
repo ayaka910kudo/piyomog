@@ -7,7 +7,10 @@ export const babyFoodNameSchema = z
   .string()
   .min(1, "食べ物名は必須です")
   .max(50, "食べ物名は50文字以内で入力してください")
-  .regex(/^[^\s].*[^\s]$/, "食べ物名の先頭と末尾にスペースは使用できません");
+  .regex(
+    /^[^\s].*[^\s]$|^[^\s]$/,
+    "食べ物名の先頭と末尾にスペースは使用できません"
+  );
 
 /** 評価のバリデーション */
 export const reactionStarsSchema = z
