@@ -251,11 +251,19 @@ export default function IngredientsPage() {
       <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
         <DialogTitle>原材料名の編集</DialogTitle>
         <DialogContent>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ mb: 2, display: "block" }}
+          >
+            * は必須項目です
+          </Typography>
           <TextField
             autoFocus
             margin="dense"
             label="原材料名"
             fullWidth
+            required
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
           />
@@ -266,6 +274,7 @@ export default function IngredientsPage() {
             onClick={handleEditSubmit}
             variant="contained"
             color="primary"
+            disabled={!newName.trim()}
           >
             保存
           </Button>
@@ -278,11 +287,19 @@ export default function IngredientsPage() {
       >
         <DialogTitle>原材料の新規作成</DialogTitle>
         <DialogContent>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ mb: 2, display: "block" }}
+          >
+            * は必須項目です
+          </Typography>
           <TextField
             autoFocus
             margin="dense"
             label="原材料名"
             fullWidth
+            required
             value={createName}
             onChange={(e) => setCreateName(e.target.value)}
           />
