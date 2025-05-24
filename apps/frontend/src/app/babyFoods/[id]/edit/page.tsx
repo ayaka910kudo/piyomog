@@ -122,6 +122,14 @@ export default function BabyFoodEditPage({
           食べ物の編集
         </Typography>
 
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ mb: 2, display: "block" }}
+        >
+          * は必須項目です
+        </Typography>
+
         <Box
           sx={{
             display: "grid",
@@ -135,6 +143,7 @@ export default function BabyFoodEditPage({
               <TextField
                 fullWidth
                 label="食べ物名"
+                required
                 value={babyFood.name}
                 onChange={(e) =>
                   setBabyFood({ ...babyFood, name: e.target.value })
@@ -145,7 +154,7 @@ export default function BabyFoodEditPage({
 
             <Box sx={{ mb: 3 }}>
               <Typography variant="h6" gutterBottom>
-                反応
+                反応 *
               </Typography>
               <Rating
                 value={babyFood.reactionStars}
@@ -188,6 +197,7 @@ export default function BabyFoodEditPage({
                   {...params}
                   label="原材料"
                   placeholder="原材料を選択"
+                  required
                 />
               )}
               renderTags={(value, getTagProps) =>

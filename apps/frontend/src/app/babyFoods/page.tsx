@@ -197,18 +197,26 @@ export default function BabyFoodsPage() {
       >
         <DialogTitle>食べ物の新規登録</DialogTitle>
         <DialogContent>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ mb: 2, display: "block" }}
+          >
+            * は必須項目です
+          </Typography>
           <TextField
             autoFocus
             margin="dense"
             label="食べ物名"
             fullWidth
+            required
             value={newBabyFood.name}
             onChange={(e) =>
               setNewBabyFood({ ...newBabyFood, name: e.target.value })
             }
           />
           <Box sx={{ mt: 2 }}>
-            <Typography component="legend">反応</Typography>
+            <Typography component="legend">反応 *</Typography>
             <Rating
               value={newBabyFood.reactionStars}
               onChange={(_, value) =>
@@ -246,6 +254,7 @@ export default function BabyFoodsPage() {
                   {...params}
                   label="原材料"
                   placeholder="原材料を検索"
+                  required
                 />
               )}
               renderTags={(value, getTagProps) =>
