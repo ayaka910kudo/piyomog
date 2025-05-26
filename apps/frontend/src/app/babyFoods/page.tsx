@@ -54,6 +54,7 @@ export default function BabyFoodsPage() {
   });
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,6 +88,21 @@ export default function BabyFoodsPage() {
   };
 
   const handleCreateSubmit = async () => {
+    // バリデーションチェック
+    if (!newBabyFood.name.trim()) {
+      setValidationError("食べ物名が未入力です");
+      return;
+    }
+    if (newBabyFood.reactionStars === 0) {
+      setValidationError("反応が未入力です");
+      return;
+    }
+    if (newBabyFood.ingredientIds.length === 0) {
+      setValidationError("原材料が未入力です");
+      return;
+    }
+
+    setValidationError(null);
     try {
       await axios.post("/api/baby-foods", newBabyFood);
       setCreateDialogOpen(false);
@@ -191,12 +207,20 @@ export default function BabyFoodsPage() {
 
       <Dialog
         open={createDialogOpen}
-        onClose={() => setCreateDialogOpen(false)}
+        onClose={() => {
+          setCreateDialogOpen(false);
+          setValidationError(null);
+        }}
         maxWidth="sm"
         fullWidth
       >
         <DialogTitle>食べ物の新規登録</DialogTitle>
         <DialogContent>
+          {validationError && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {validationError}
+            </Alert>
+          )}
           <Typography
             variant="caption"
             color="text.secondary"
@@ -272,7 +296,11 @@ export default function BabyFoodsPage() {
             onClick={handleCreateSubmit}
             variant="contained"
             color="primary"
-            disabled={!newBabyFood.name.trim()}
+            disabled={
+              !newBabyFood.name.trim() ||
+              newBabyFood.reactionStars === 0 ||
+              newBabyFood.ingredientIds.length === 0
+            }
           >
             作成
           </Button>
