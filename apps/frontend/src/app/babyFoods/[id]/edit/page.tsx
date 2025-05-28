@@ -46,6 +46,7 @@ export default function BabyFoodEditPage({
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,6 +72,21 @@ export default function BabyFoodEditPage({
   const handleUpdate = async () => {
     if (!babyFood) return;
 
+    // バリデーションチェック
+    if (!babyFood.name.trim()) {
+      setValidationError("食べ物名が未入力です");
+      return;
+    }
+    if (babyFood.reactionStars === 0) {
+      setValidationError("反応が未入力です");
+      return;
+    }
+    if (babyFood.ingredients.length === 0) {
+      setValidationError("原材料が未入力です");
+      return;
+    }
+
+    setValidationError(null);
     try {
       await axios.patch(`/api/baby-foods/${resolvedParams.id}`, {
         name: babyFood.name,
@@ -122,6 +138,20 @@ export default function BabyFoodEditPage({
           食べ物の編集
         </Typography>
 
+        {validationError && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {validationError}
+          </Alert>
+        )}
+
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ mb: 2, display: "block" }}
+        >
+          * は必須項目です
+        </Typography>
+
         <Box
           sx={{
             display: "grid",
@@ -135,6 +165,7 @@ export default function BabyFoodEditPage({
               <TextField
                 fullWidth
                 label="食べ物名"
+                required
                 value={babyFood.name}
                 onChange={(e) =>
                   setBabyFood({ ...babyFood, name: e.target.value })
@@ -145,7 +176,7 @@ export default function BabyFoodEditPage({
 
             <Box sx={{ mb: 3 }}>
               <Typography variant="h6" gutterBottom>
-                反応
+                反応 *
               </Typography>
               <Rating
                 value={babyFood.reactionStars}
@@ -188,6 +219,7 @@ export default function BabyFoodEditPage({
                   {...params}
                   label="原材料"
                   placeholder="原材料を選択"
+                  required
                 />
               )}
               renderTags={(value, getTagProps) =>
@@ -213,7 +245,11 @@ export default function BabyFoodEditPage({
             variant="contained"
             color="primary"
             onClick={handleUpdate}
-            disabled={!babyFood.name.trim()}
+            disabled={
+              !babyFood.name.trim() ||
+              babyFood.reactionStars === 0 ||
+              babyFood.ingredients.length === 0
+            }
           >
             更新
           </Button>
