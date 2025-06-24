@@ -4,51 +4,87 @@ import { Container, Typography, Box, Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import InventoryIcon from "@mui/icons-material/Inventory";
+import { yellow } from "@mui/material/colors";
 
 export default function Home() {
   const router = useRouter();
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Box display="flex" justifyContent="center" alignItems="center" mb={4}>
-        <Typography variant="h3" component="h1" gutterBottom>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        mb={4}
+        sx={{
+          width: "100%",
+          textAlign: "center",
+        }}
+      >
+        <Typography
+          variant="h3"
+          component="h1"
+          gutterBottom
+          sx={{
+            // backgroundColor: yellow[200],
+            padding: 2,
+            textAlign: "center",
+            width: "80%",
+            borderRadius: 1,
+            margin: "0 auto",
+          }}
+        >
           piyomog
         </Typography>
       </Box>
 
       <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
         sx={{
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "1fr",
-            sm: "repeat(2, 1fr)",
-          },
-          gap: 3,
-          maxWidth: "800px",
-          margin: "0 auto",
+          width: "100%",
+          textAlign: "center",
         }}
       >
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          startIcon={<RestaurantIcon />}
-          onClick={() => router.push("/babyFoods")}
-          sx={{ height: "100px", fontSize: "1.1rem" }}
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "repeat(2, 1fr)",
+            },
+            gap: 3,
+            maxWidth: "800px",
+            margin: "0 auto",
+            width: "80%",
+            // backgroundColor: yellow[100],
+            padding: 2,
+            borderRadius: 1,
+          }}
         >
-          食べ物一覧
-        </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            startIcon={<RestaurantIcon />}
+            onClick={() => router.push("/babyFoods")}
+            sx={{ height: "100px", fontSize: "1.1rem" }}
+          >
+            食べ物一覧
+          </Button>
 
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          startIcon={<InventoryIcon />}
-          onClick={() => router.push("/ingredients")}
-          sx={{ height: "100px", fontSize: "1.1rem" }}
-        >
-          原材料一覧
-        </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            startIcon={<InventoryIcon />}
+            onClick={() => router.push("/ingredients")}
+            sx={{ height: "100px", fontSize: "1.1rem" }}
+          >
+            原材料一覧
+          </Button>
+        </Box>
       </Box>
     </Container>
   );
