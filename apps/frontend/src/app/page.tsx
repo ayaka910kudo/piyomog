@@ -50,6 +50,35 @@ export default function Home() {
         display="flex"
         justifyContent="center"
         alignItems="center"
+        mb={4}
+        sx={{
+          width: "100%",
+          textAlign: "center",
+        }}
+      >
+        <Typography
+          variant="h6"
+          component="h2"
+          gutterBottom
+          sx={{
+            // backgroundColor: yellow[200],
+            padding: 2,
+            textAlign: "center",
+            width: "80%",
+            maxWidth: "800px",
+            borderRadius: 1,
+            margin: "0 auto",
+          }}
+        >
+          アプリの説明文
+          このアプリは、ベビーの食べ物と原材料を管理するためのアプリです。
+        </Typography>
+      </Box>
+
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
         sx={{
           width: "100%",
           textAlign: "center",
