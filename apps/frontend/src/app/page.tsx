@@ -1,16 +1,23 @@
 "use client";
 
-import { Container, Typography, Box, Button } from "@mui/material";
+import { Typography, Box, Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import InventoryIcon from "@mui/icons-material/Inventory";
-import { yellow } from "@mui/material/colors";
 
 export default function Home() {
   const router = useRouter();
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+    <Box
+      sx={{
+        mt: 4,
+        mb: 4,
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <Box
         display="flex"
         justifyContent="center"
@@ -30,6 +37,7 @@ export default function Home() {
             padding: 2,
             textAlign: "center",
             width: "80%",
+            maxWidth: "800px",
             borderRadius: 1,
             margin: "0 auto",
           }}
@@ -86,6 +94,6 @@ export default function Home() {
           </Button>
         </Box>
       </Box>
-    </Container>
+    </Box>
   );
 }
