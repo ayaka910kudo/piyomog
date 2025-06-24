@@ -21,6 +21,7 @@ import { use } from "react";
 import { useRouter } from "next/navigation";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { HomeButton } from "@/components/HomeButton";
 
 // 食べ物の型定義
 interface BabyFood {
@@ -101,6 +102,7 @@ export default function BabyFoodDetailPage({
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <HomeButton />
       <Paper elevation={3} sx={{ p: 4, position: "relative" }}>
         <Box
           sx={{

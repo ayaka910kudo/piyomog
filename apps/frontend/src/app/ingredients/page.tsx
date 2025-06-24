@@ -28,6 +28,7 @@ import {
   Add as AddIcon,
 } from "@mui/icons-material";
 import axios from "axios";
+import { HomeButton } from "@/components/HomeButton";
 
 interface Ingredient {
   id: number;
@@ -193,6 +194,7 @@ export default function IngredientsPage() {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <HomeButton />
       <Paper elevation={3} sx={{ p: 4 }}>
         <Box
           display="flex"

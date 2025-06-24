@@ -17,6 +17,7 @@ import {
 import axios from "axios";
 import { use } from "react";
 import { useRouter } from "next/navigation";
+import { HomeButton } from "@/components/HomeButton";
 
 // 食べ物の型定義
 interface BabyFood {
@@ -133,6 +134,7 @@ export default function BabyFoodEditPage({
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <HomeButton />
       <Paper elevation={3} sx={{ p: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           食べ物の編集

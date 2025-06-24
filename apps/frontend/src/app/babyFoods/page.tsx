@@ -23,6 +23,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
 import axios from "axios";
+import { HomeButton } from "@/components/HomeButton";
 
 // 食べ物の型定義
 interface BabyFood {
@@ -137,6 +138,7 @@ export default function BabyFoodsPage() {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <HomeButton />
       <Box display="flex" justifyContent="center" alignItems="center" mb={4}>
         <Typography variant="h4" component="h1">
           食べ物一覧
