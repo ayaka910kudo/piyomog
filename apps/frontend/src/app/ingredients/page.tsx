@@ -226,23 +226,41 @@ export default function IngredientsPage() {
           </Box>
 
           <TableContainer>
-            <Table>
+            <Table sx={{ "& .MuiTableCell-root": { padding: "8px 16px" } }}>
               <TableHead>
                 <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>原材料名</TableCell>
-                  <TableCell align="right">操作</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>原材料名</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                    操作
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {ingredients.map((ingredient) => (
-                  <TableRow key={ingredient.id}>
-                    <TableCell>{ingredient.id}</TableCell>
-                    <TableCell>{ingredient.name}</TableCell>
+                  <TableRow
+                    key={ingredient.id}
+                    sx={{
+                      "&:nth-of-type(odd)": {
+                        backgroundColor: "rgba(0, 0, 0, 0.02)",
+                      },
+                      "&:hover": {
+                        backgroundColor: "rgba(0, 0, 0, 0.04)",
+                      },
+                      height: "48px",
+                    }}
+                  >
+                    <TableCell sx={{ fontSize: "1rem" }}>
+                      {ingredient.id}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "1rem" }}>
+                      {ingredient.name}
+                    </TableCell>
                     <TableCell align="right">
                       <IconButton
                         onClick={() => handleEditClick(ingredient)}
                         color="primary"
+                        sx={{ mr: 1 }}
                       >
                         <EditIcon />
                       </IconButton>
