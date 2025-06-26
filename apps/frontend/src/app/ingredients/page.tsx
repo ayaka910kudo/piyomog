@@ -259,14 +259,26 @@ export default function IngredientsPage() {
                     <TableCell align="right">
                       <IconButton
                         onClick={() => handleEditClick(ingredient)}
-                        color="primary"
-                        sx={{ mr: 1 }}
+                        sx={{
+                          mr: 1,
+                          color: "rgba(0, 0, 0, 0.6)",
+                          "&:hover": {
+                            backgroundColor: "rgba(0, 0, 0, 0.04)",
+                            color: "rgba(0, 0, 0, 0.8)",
+                          },
+                        }}
                       >
                         <EditIcon />
                       </IconButton>
                       <IconButton
                         onClick={() => handleDeleteClick(ingredient.id)}
-                        color="error"
+                        sx={{
+                          color: "rgba(0, 0, 0, 0.6)",
+                          "&:hover": {
+                            backgroundColor: "rgba(0, 0, 0, 0.04)",
+                            color: "rgba(0, 0, 0, 0.8)",
+                          },
+                        }}
                       >
                         <DeleteIcon />
                       </IconButton>
