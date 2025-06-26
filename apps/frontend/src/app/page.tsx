@@ -12,10 +12,11 @@ export default function Home() {
     <Box
       sx={{
         mt: 4,
-        mb: 4,
+
         width: "100%",
         display: "flex",
         flexDirection: "column",
+        gap: 4,
       }}
     >
       <Box
