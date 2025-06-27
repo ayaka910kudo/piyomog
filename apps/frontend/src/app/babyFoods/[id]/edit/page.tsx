@@ -161,6 +161,9 @@ export default function BabyFoodEditPage({
         >
           <Box>
             <Box sx={{ mb: 3 }}>
+              <Typography variant="h6" sx={{ mb: 1 }}>
+                食べ物名 *
+              </Typography>
               <TextField
                 fullWidth
                 label="食べ物名"
@@ -169,12 +172,11 @@ export default function BabyFoodEditPage({
                 onChange={(e) =>
                   setBabyFood({ ...babyFood, name: e.target.value })
                 }
-                sx={{ mb: 2 }}
               />
             </Box>
 
             <Box sx={{ mb: 3 }}>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6" sx={{ mb: 1 }}>
                 反応 *
               </Typography>
               <Rating
@@ -183,11 +185,13 @@ export default function BabyFoodEditPage({
                   setBabyFood({ ...babyFood, reactionStars: value || 0 })
                 }
                 size="large"
-                sx={{ mb: 2 }}
               />
             </Box>
 
             <Box sx={{ mb: 3 }}>
+              <Typography variant="h6" sx={{ mb: 1 }}>
+                メモ
+              </Typography>
               <TextField
                 fullWidth
                 label="メモ"
@@ -202,7 +206,7 @@ export default function BabyFoodEditPage({
           </Box>
 
           <Box>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" sx={{ mb: 1 }}>
               使用食材
             </Typography>
             <Autocomplete

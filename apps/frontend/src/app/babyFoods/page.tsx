@@ -238,19 +238,27 @@ export default function BabyFoodsPage() {
           >
             * は必須項目です
           </Typography>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="食べ物名"
-            fullWidth
-            required
-            value={newBabyFood.name}
-            onChange={(e) =>
-              setNewBabyFood({ ...newBabyFood, name: e.target.value })
-            }
-          />
-          <Box sx={{ mt: 2 }}>
-            <Typography component="legend">反応 *</Typography>
+
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              食べ物名 *
+            </Typography>
+            <TextField
+              autoFocus
+              fullWidth
+              label="食べ物名"
+              required
+              value={newBabyFood.name}
+              onChange={(e) =>
+                setNewBabyFood({ ...newBabyFood, name: e.target.value })
+              }
+            />
+          </Box>
+
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              反応 *
+            </Typography>
             <Rating
               value={newBabyFood.reactionStars}
               onChange={(_, value) =>
@@ -258,47 +266,60 @@ export default function BabyFoodsPage() {
               }
             />
           </Box>
-          <TextField
-            margin="dense"
-            label="メモ"
-            fullWidth
-            multiline
-            rows={2}
-            value={newBabyFood.memo}
-            onChange={(e) =>
-              setNewBabyFood({ ...newBabyFood, memo: e.target.value })
-            }
-          />
-          <FormControl fullWidth margin="dense">
-            <Autocomplete
-              multiple
-              options={ingredients}
-              getOptionLabel={(option) => option.name}
-              value={ingredients.filter((ingredient) =>
-                newBabyFood.ingredientIds.includes(ingredient.id)
-              )}
-              onChange={(_, newValue) => {
-                setNewBabyFood({
-                  ...newBabyFood,
-                  ingredientIds: newValue.map((ingredient) => ingredient.id),
-                });
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="原材料"
-                  placeholder="原材料を検索"
-                  required
-                />
-              )}
-              renderTags={(value, getTagProps) =>
-                value.map((option, index) => {
-                  const { key, ...chipProps } = getTagProps({ index });
-                  return <Chip key={key} label={option.name} {...chipProps} />;
-                })
+
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              メモ
+            </Typography>
+            <TextField
+              fullWidth
+              label="メモ"
+              multiline
+              rows={2}
+              value={newBabyFood.memo}
+              onChange={(e) =>
+                setNewBabyFood({ ...newBabyFood, memo: e.target.value })
               }
             />
-          </FormControl>
+          </Box>
+
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              原材料 *
+            </Typography>
+            <FormControl fullWidth>
+              <Autocomplete
+                multiple
+                options={ingredients}
+                getOptionLabel={(option) => option.name}
+                value={ingredients.filter((ingredient) =>
+                  newBabyFood.ingredientIds.includes(ingredient.id)
+                )}
+                onChange={(_, newValue) => {
+                  setNewBabyFood({
+                    ...newBabyFood,
+                    ingredientIds: newValue.map((ingredient) => ingredient.id),
+                  });
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="原材料"
+                    placeholder="原材料を検索"
+                    required
+                  />
+                )}
+                renderTags={(value, getTagProps) =>
+                  value.map((option, index) => {
+                    const { key, ...chipProps } = getTagProps({ index });
+                    return (
+                      <Chip key={key} label={option.name} {...chipProps} />
+                    );
+                  })
+                }
+              />
+            </FormControl>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setCreateDialogOpen(false)}>キャンセル</Button>

@@ -127,7 +127,10 @@ export default function BabyFoodDetailPage({
           </Button>
         </Box>
 
-        <Typography variant="h4" component="h1" gutterBottom>
+        <Typography variant="h6" sx={{ mb: 1 }}>
+          食べ物名
+        </Typography>
+        <Typography variant="h4" component="h1" sx={{ mb: 3 }}>
           {babyFood?.name}
         </Typography>
 
@@ -141,19 +144,14 @@ export default function BabyFoodDetailPage({
         >
           <Box>
             <Box sx={{ mb: 3 }}>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6" sx={{ mb: 1 }}>
                 反応
               </Typography>
-              <Rating
-                value={babyFood?.reactionStars}
-                readOnly
-                size="large"
-                sx={{ mb: 2 }}
-              />
+              <Rating value={babyFood?.reactionStars} readOnly size="large" />
             </Box>
 
             <Box sx={{ mb: 3 }}>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6" sx={{ mb: 1 }}>
                 メモ
               </Typography>
               <Typography variant="body1" color="text.secondary">
@@ -163,7 +161,7 @@ export default function BabyFoodDetailPage({
           </Box>
 
           <Box>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" sx={{ mb: 1 }}>
               使用食材
             </Typography>
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
