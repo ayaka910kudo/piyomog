@@ -138,7 +138,7 @@ export default function BabyFoodsPage() {
 
   return (
     <>
-      <Header title="食べ物一覧" />
+      <Header title="piyomog" />
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Box display="flex" justifyContent="center" alignItems="center" mb={4}>
           <Typography variant="h4" component="h1">

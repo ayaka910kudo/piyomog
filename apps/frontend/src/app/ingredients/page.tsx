@@ -194,7 +194,7 @@ export default function IngredientsPage() {
 
   return (
     <>
-      <Header title="原材料一覧" />
+      <Header title="piyomog" />
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Paper elevation={3} sx={{ p: 4 }}>
           <Box
