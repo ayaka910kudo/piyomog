@@ -4,87 +4,45 @@ import { Typography, Box, Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import InventoryIcon from "@mui/icons-material/Inventory";
+import { CenteredLayout, CenteredContent } from "@/components/CenteredLayout";
 
 export default function Home() {
   const router = useRouter();
 
   return (
-    <Box
-      sx={{
-        mt: 4,
-
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        gap: 4,
-      }}
-    >
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        mb={4}
-        sx={{
-          width: "100%",
-          textAlign: "center",
-        }}
-      >
+    <CenteredLayout gap={4}>
+      <CenteredContent>
         <Typography
           variant="h3"
           component="h1"
           gutterBottom
           sx={{
-            // backgroundColor: yellow[200],
             padding: 2,
             textAlign: "center",
-            width: "80%",
-            maxWidth: "800px",
             borderRadius: 1,
-            margin: "0 auto",
           }}
         >
           piyomog
         </Typography>
-      </Box>
+      </CenteredContent>
 
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        mb={4}
-        sx={{
-          width: "100%",
-          textAlign: "center",
-        }}
-      >
+      <CenteredContent>
         <Typography
           variant="h6"
           component="h2"
           gutterBottom
           sx={{
-            // backgroundColor: yellow[200],
             padding: 2,
             textAlign: "center",
-            width: "80%",
-            maxWidth: "800px",
             borderRadius: 1,
-            margin: "0 auto",
           }}
         >
           アプリの説明文
           このアプリは、ベビーの食べ物と原材料を管理するためのアプリです。
         </Typography>
-      </Box>
+      </CenteredContent>
 
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        sx={{
-          width: "100%",
-          textAlign: "center",
-        }}
-      >
+      <CenteredContent>
         <Box
           sx={{
             display: "grid",
@@ -93,10 +51,6 @@ export default function Home() {
               sm: "repeat(2, 1fr)",
             },
             gap: 3,
-            maxWidth: "800px",
-            margin: "0 auto",
-            width: "80%",
-            // backgroundColor: yellow[100],
             padding: 2,
             borderRadius: 1,
           }}
@@ -123,7 +77,7 @@ export default function Home() {
             原材料一覧
           </Button>
         </Box>
-      </Box>
-    </Box>
+      </CenteredContent>
+    </CenteredLayout>
   );
 }

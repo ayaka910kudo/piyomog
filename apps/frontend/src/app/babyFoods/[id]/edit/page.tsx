@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import {
-  Container,
   Box,
   CircularProgress,
   Alert,
@@ -15,8 +14,8 @@ import {
   Autocomplete,
 } from "@mui/material";
 import axios from "axios";
-import { use } from "react";
 import { useRouter } from "next/navigation";
+import { PageContainer } from "@/components/CenteredLayout";
 
 // 食べ物の型定義
 interface BabyFood {
@@ -117,22 +116,22 @@ export default function BabyFoodEditPage({
 
   if (error) {
     return (
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <PageContainer>
         <Alert severity="error">{error}</Alert>
-      </Container>
+      </PageContainer>
     );
   }
 
   if (!babyFood) {
     return (
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <PageContainer>
         <Alert severity="error">食べ物が見つかりません</Alert>
-      </Container>
+      </PageContainer>
     );
   }
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+    <PageContainer>
       <Paper elevation={3} sx={{ p: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           食べ物の編集
@@ -255,6 +254,6 @@ export default function BabyFoodEditPage({
           </Button>
         </Box>
       </Paper>
-    </Container>
+    </PageContainer>
   );
 }

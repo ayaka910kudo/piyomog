@@ -19,9 +19,10 @@ import {
   Chip,
   Autocomplete,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
+import { Add as AddIcon } from "@mui/icons-material";
 import Link from "next/link";
 import axios from "axios";
+import { CenteredLayout, CenteredContent } from "@/components/CenteredLayout";
 
 // 食べ物の型定義
 interface BabyFood {
@@ -140,142 +141,79 @@ export default function BabyFoodsPage() {
 
   return (
     <>
-      <Box
-        sx={{
-          mt: 4,
-          mb: 4,
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          gap: 4,
-        }}
-      >
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          sx={{
-            width: "100%",
-            textAlign: "center",
-          }}
-        >
-          <Typography
-            variant="h4"
-            component="h1"
-            sx={{
-              width: "80%",
-              maxWidth: "800px",
-              margin: "0 auto",
-            }}
-          >
+      <CenteredLayout gap={4}>
+        <CenteredContent>
+          <Typography variant="h4" component="h1">
             食べ物一覧
           </Typography>
-        </Box>
+        </CenteredContent>
 
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          sx={{
-            width: "100%",
-            textAlign: "center",
-          }}
-        >
-          <Box
-            sx={{
-              width: "80%",
-              maxWidth: "800px",
-              margin: "0 auto",
-              display: "flex",
-              justifyContent: "flex-end",
-            }}
+        <CenteredContent justifyContent="flex-end" textAlign="left">
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+            onClick={handleCreateClick}
           >
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<AddIcon />}
-              onClick={handleCreateClick}
+            新規登録
+          </Button>
+        </CenteredContent>
+
+        <CenteredContent textAlign="left">
+          {babyFoods.length === 0 ? (
+            <Alert severity="info">登録された食べ物はありません</Alert>
+          ) : (
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: {
+                  xs: "1fr",
+                  sm: "1fr 1fr",
+                  md: "1fr 1fr 1fr",
+                },
+                gap: 3,
+              }}
             >
-              新規登録
-            </Button>
-          </Box>
-        </Box>
-
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          sx={{
-            width: "100%",
-            textAlign: "center",
-          }}
-        >
-          <Box
-            sx={{
-              width: "80%",
-              maxWidth: "800px",
-              margin: "0 auto",
-            }}
-          >
-            {babyFoods.length === 0 ? (
-              <Alert severity="info">登録された食べ物はありません</Alert>
-            ) : (
-              <Box
-                sx={{
-                  display: "grid",
-                  gridTemplateColumns: {
-                    xs: "1fr",
-                    sm: "1fr 1fr",
-                    md: "1fr 1fr 1fr",
-                  },
-                  gap: 3,
-                }}
-              >
-                {babyFoods.map((food) => (
-                  <Card key={food.id}>
-                    <CardContent>
-                      <Typography variant="h6" component="h2" gutterBottom>
-                        {food.name}
+              {babyFoods.map((food) => (
+                <Card key={food.id}>
+                  <CardContent>
+                    <Typography variant="h6" component="h2" gutterBottom>
+                      {food.name}
+                    </Typography>
+                    <Box display="flex" alignItems="center" mb={1}>
+                      <Typography component="legend" mr={1}>
+                        反応:
                       </Typography>
-                      <Box display="flex" alignItems="center" mb={1}>
-                        <Typography component="legend" mr={1}>
-                          反応:
-                        </Typography>
-                        <Rating value={food.reactionStars} readOnly />
-                      </Box>
-                      {food.memo && (
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          mb={1}
-                        >
-                          {food.memo}
-                        </Typography>
-                      )}
-                      {food.ingredients && food.ingredients.length > 0 && (
-                        <Typography variant="body2">
-                          原材料:{" "}
-                          {food.ingredients.map((ing) => ing.name).join(", ")}
-                        </Typography>
-                      )}
-                      <Box mt={2} display="flex" justifyContent="flex-end">
-                        <Button
-                          size="small"
-                          color="primary"
-                          component={Link}
-                          href={`/babyFoods/${food.id}`}
-                        >
-                          詳細
-                        </Button>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                ))}
-              </Box>
-            )}
-          </Box>
-        </Box>
-      </Box>
+                      <Rating value={food.reactionStars} readOnly />
+                    </Box>
+                    {food.memo && (
+                      <Typography variant="body2" color="text.secondary" mb={1}>
+                        {food.memo}
+                      </Typography>
+                    )}
+                    {food.ingredients && food.ingredients.length > 0 && (
+                      <Typography variant="body2">
+                        原材料:{" "}
+                        {food.ingredients.map((ing) => ing.name).join(", ")}
+                      </Typography>
+                    )}
+                    <Box mt={2} display="flex" justifyContent="flex-end">
+                      <Button
+                        size="small"
+                        color="primary"
+                        component={Link}
+                        href={`/babyFoods/${food.id}`}
+                      >
+                        詳細
+                      </Button>
+                    </Box>
+                  </CardContent>
+                </Card>
+              ))}
+            </Box>
+          )}
+        </CenteredContent>
+      </CenteredLayout>
 
       <Dialog
         open={createDialogOpen}
