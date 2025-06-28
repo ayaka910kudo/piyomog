@@ -113,11 +113,10 @@ export const ContentCard = ({
     <Paper
       elevation={3}
       sx={{
-        p: 5,
         ...(enableActions && { position: "relative" }),
       }}
     >
-      {children}
+      <Box sx={{ padding: "32px" }}>{children}</Box>
     </Paper>
   );
 };
@@ -131,8 +130,8 @@ export const ActionButtons = ({ children }: ActionButtonsProps) => {
     <Box
       sx={{
         position: "absolute",
-        top: 20,
-        right: 20,
+        top: 16,
+        right: 16,
         display: "flex",
         gap: 2,
       }}
