@@ -6,7 +6,6 @@ import {
   CircularProgress,
   Alert,
   Typography,
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -26,7 +25,7 @@ import {
   Delete as DeleteIcon,
   Add as AddIcon,
 } from "@mui/icons-material";
-import { PageContainer } from "@/components/CenteredLayout";
+import { PageContainer, ContentCard } from "@/components/CenteredLayout";
 import axios from "axios";
 
 interface Ingredient {
@@ -193,12 +192,12 @@ export default function IngredientsPage() {
 
   return (
     <PageContainer>
-      <Paper elevation={3} sx={{ p: 4 }}>
+      <ContentCard>
         <Box
           display="flex"
           justifyContent="space-between"
           alignItems="center"
-          mb={3}
+          mb={4}
         >
           <Typography variant="h4" component="h1">
             原材料一覧
@@ -213,8 +212,8 @@ export default function IngredientsPage() {
           </Button>
         </Box>
 
-        <TableContainer>
-          <Table sx={{ "& .MuiTableCell-root": { padding: "8px 16px" } }}>
+        <TableContainer sx={{ mt: 2 }}>
+          <Table sx={{ "& .MuiTableCell-root": { padding: "12px 20px" } }}>
             <TableHead>
               <TableRow>
                 <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
@@ -276,7 +275,7 @@ export default function IngredientsPage() {
             </TableBody>
           </Table>
         </TableContainer>
-      </Paper>
+      </ContentCard>
 
       <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
         <DialogTitle>原材料名の編集</DialogTitle>

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import {
   Box,
   Typography,
-  Paper,
   Rating,
   Chip,
   Button,
@@ -17,7 +16,11 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
-import { PageContainer } from "@/components/CenteredLayout";
+import {
+  PageContainer,
+  ContentCard,
+  ActionButtons,
+} from "@/components/CenteredLayout";
 import axios from "axios";
 
 // 食べ物の型定義
@@ -99,16 +102,8 @@ export default function BabyFoodDetailPage({
 
   return (
     <PageContainer>
-      <Paper elevation={3} sx={{ p: 4, position: "relative" }}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: 16,
-            right: 16,
-            display: "flex",
-            gap: 2,
-          }}
-        >
+      <ContentCard enableActions>
+        <ActionButtons>
           <Button
             variant="outlined"
             color="primary"
@@ -125,12 +120,12 @@ export default function BabyFoodDetailPage({
           >
             削除
           </Button>
-        </Box>
+        </ActionButtons>
 
-        <Typography variant="h6" sx={{ mb: 1 }}>
+        <Typography variant="h6" sx={{ mb: 1.5 }}>
           食べ物名
         </Typography>
-        <Typography variant="h4" component="h1" sx={{ mb: 3 }}>
+        <Typography variant="h4" component="h1" sx={{ mb: 4 }}>
           {babyFood?.name}
         </Typography>
 
@@ -138,33 +133,52 @@ export default function BabyFoodDetailPage({
           sx={{
             display: "grid",
             gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-            gap: 3,
-            mt: 3,
+            gap: 4,
+            mt: 2,
           }}
         >
           <Box>
-            <Box sx={{ mb: 3 }}>
-              <Typography variant="h6" sx={{ mb: 1 }}>
+            <Box sx={{ mb: 4 }}>
+              <Typography variant="h6" sx={{ mb: 1.5 }}>
                 反応
               </Typography>
-              <Rating value={babyFood?.reactionStars} readOnly size="large" />
+              <Rating
+                value={babyFood?.reactionStars}
+                readOnly
+                size="large"
+                sx={{ mt: 1 }}
+              />
             </Box>
 
-            <Box sx={{ mb: 3 }}>
-              <Typography variant="h6" sx={{ mb: 1 }}>
+            <Box sx={{ mb: 4 }}>
+              <Typography variant="h6" sx={{ mb: 1.5 }}>
                 メモ
               </Typography>
-              <Typography variant="body1" color="text.secondary">
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                sx={{
+                  lineHeight: 1.6,
+                  mt: 1,
+                }}
+              >
                 {babyFood?.memo || "メモはありません"}
               </Typography>
             </Box>
           </Box>
 
           <Box>
-            <Typography variant="h6" sx={{ mb: 1 }}>
+            <Typography variant="h6" sx={{ mb: 1.5 }}>
               使用食材
             </Typography>
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 1.5,
+                mt: 1,
+              }}
+            >
               {babyFood?.ingredients.map((ingredient) => (
                 <Chip
                   key={ingredient.id}
@@ -176,7 +190,7 @@ export default function BabyFoodDetailPage({
             </Box>
           </Box>
         </Box>
-      </Paper>
+      </ContentCard>
 
       <Dialog
         open={deleteDialogOpen}

@@ -6,7 +6,6 @@ import {
   CircularProgress,
   Alert,
   Typography,
-  Paper,
   Chip,
   Rating,
   Button,
@@ -15,7 +14,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { PageContainer } from "@/components/CenteredLayout";
+import { PageContainer, ContentCard } from "@/components/CenteredLayout";
 
 // 食べ物の型定義
 interface BabyFood {
@@ -132,13 +131,13 @@ export default function BabyFoodEditPage({
 
   return (
     <PageContainer>
-      <Paper elevation={3} sx={{ p: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
+      <ContentCard>
+        <Typography variant="h4" component="h1" sx={{ mb: 3 }}>
           食べ物の編集
         </Typography>
 
         {validationError && (
-          <Alert severity="error" sx={{ mb: 2 }}>
+          <Alert severity="error" sx={{ mb: 3 }}>
             {validationError}
           </Alert>
         )}
@@ -146,7 +145,7 @@ export default function BabyFoodEditPage({
         <Typography
           variant="caption"
           color="text.secondary"
-          sx={{ mb: 2, display: "block" }}
+          sx={{ mb: 3, display: "block" }}
         >
           * は必須項目です
         </Typography>
@@ -155,13 +154,13 @@ export default function BabyFoodEditPage({
           sx={{
             display: "grid",
             gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-            gap: 3,
-            mt: 3,
+            gap: 4,
+            mt: 2,
           }}
         >
           <Box>
-            <Box sx={{ mb: 3 }}>
-              <Typography variant="h6" sx={{ mb: 1 }}>
+            <Box sx={{ mb: 4 }}>
+              <Typography variant="h6" sx={{ mb: 1.5 }}>
                 食べ物名 *
               </Typography>
               <TextField
@@ -172,11 +171,12 @@ export default function BabyFoodEditPage({
                 onChange={(e) =>
                   setBabyFood({ ...babyFood, name: e.target.value })
                 }
+                sx={{ mt: 1 }}
               />
             </Box>
 
-            <Box sx={{ mb: 3 }}>
-              <Typography variant="h6" sx={{ mb: 1 }}>
+            <Box sx={{ mb: 4 }}>
+              <Typography variant="h6" sx={{ mb: 1.5 }}>
                 反応 *
               </Typography>
               <Rating
@@ -185,11 +185,12 @@ export default function BabyFoodEditPage({
                   setBabyFood({ ...babyFood, reactionStars: value || 0 })
                 }
                 size="large"
+                sx={{ mt: 1 }}
               />
             </Box>
 
-            <Box sx={{ mb: 3 }}>
-              <Typography variant="h6" sx={{ mb: 1 }}>
+            <Box sx={{ mb: 4 }}>
+              <Typography variant="h6" sx={{ mb: 1.5 }}>
                 メモ
               </Typography>
               <TextField
@@ -201,12 +202,13 @@ export default function BabyFoodEditPage({
                 onChange={(e) =>
                   setBabyFood({ ...babyFood, memo: e.target.value })
                 }
+                sx={{ mt: 1 }}
               />
             </Box>
           </Box>
 
           <Box>
-            <Typography variant="h6" sx={{ mb: 1 }}>
+            <Typography variant="h6" sx={{ mb: 1.5 }}>
               使用食材
             </Typography>
             <Autocomplete
@@ -231,12 +233,13 @@ export default function BabyFoodEditPage({
                   return <Chip key={key} label={option.name} {...chipProps} />;
                 })
               }
+              sx={{ mt: 1 }}
             />
           </Box>
         </Box>
 
         <Box
-          sx={{ mt: 4, display: "flex", justifyContent: "flex-end", gap: 2 }}
+          sx={{ mt: 5, display: "flex", justifyContent: "flex-end", gap: 2 }}
         >
           <Button
             variant="outlined"
@@ -257,7 +260,7 @@ export default function BabyFoodEditPage({
             更新
           </Button>
         </Box>
-      </Paper>
+      </ContentCard>
     </PageContainer>
   );
 }

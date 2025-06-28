@@ -1,6 +1,6 @@
 "use client";
 
-import { Box } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { ReactNode } from "react";
 
 interface CenteredLayoutProps {
@@ -96,6 +96,48 @@ export const PageContainer = ({
       }}
     >
       <Box sx={{ width, maxWidth }}>{children}</Box>
+    </Box>
+  );
+};
+
+interface ContentCardProps {
+  children: ReactNode;
+  enableActions?: boolean;
+}
+
+export const ContentCard = ({
+  children,
+  enableActions = false,
+}: ContentCardProps) => {
+  return (
+    <Paper
+      elevation={3}
+      sx={{
+        p: 5,
+        ...(enableActions && { position: "relative" }),
+      }}
+    >
+      {children}
+    </Paper>
+  );
+};
+
+interface ActionButtonsProps {
+  children: ReactNode;
+}
+
+export const ActionButtons = ({ children }: ActionButtonsProps) => {
+  return (
+    <Box
+      sx={{
+        position: "absolute",
+        top: 20,
+        right: 20,
+        display: "flex",
+        gap: 2,
+      }}
+    >
+      {children}
     </Box>
   );
 };
