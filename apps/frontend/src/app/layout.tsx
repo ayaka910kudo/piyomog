@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Header } from "@/components/Header";
+import { Box } from "@mui/material";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,8 +29,23 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Providers>
-          <Header title="ぴよもぐ" />
-          {children}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              minHeight: "100vh",
+            }}
+          >
+            <Header title="ぴよもぐ" />
+            <Box
+              sx={{
+                backgroundColor: "grey.50",
+                flex: 1,
+              }}
+            >
+              {children}
+            </Box>
+          </Box>
         </Providers>
       </body>
     </html>
