@@ -143,7 +143,11 @@ export default function BabyFoodsPage() {
     <>
       <CenteredLayout gap={4}>
         <CenteredContent>
-          <Typography variant="h4" component="h1">
+          <Typography
+            variant="h4"
+            component="h1"
+            sx={{ color: "text.primary" }}
+          >
             食べ物一覧
           </Typography>
         </CenteredContent>
