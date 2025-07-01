@@ -13,7 +13,7 @@ interface CenteredLayoutProps {
 export const CenteredLayout = ({
   children,
   gap,
-  mt = 4,
+  mt = 0,
   mb = 4,
 }: CenteredLayoutProps) => {
   return (
@@ -88,7 +88,7 @@ export const PageContainer = ({
   return (
     <Box
       sx={{
-        mt: 4,
+        mt: 0,
         mb: 4,
         width: "100%",
         display: "flex",

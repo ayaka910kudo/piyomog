@@ -20,6 +20,7 @@ export default function Home() {
             padding: 2,
             textAlign: "center",
             borderRadius: 1,
+            color: "text.primary",
           }}
         >
           piyomog
@@ -35,6 +36,7 @@ export default function Home() {
             padding: 2,
             textAlign: "center",
             borderRadius: 1,
+            color: "text.primary",
           }}
         >
           アプリの説明文
