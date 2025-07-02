@@ -14,16 +14,12 @@ import Image from "next/image";
 
 interface HeaderProps {
   title?: string;
-  showHomeButton?: boolean;
 }
 
-export const Header = ({
-  title = "ぴよもぐ",
-  showHomeButton = true,
-}: HeaderProps) => {
+export const Header = ({ title = "ぴよもぐ" }: HeaderProps) => {
   const router = useRouter();
 
-  const handleHomeClick = () => {
+  const handleLogoClick = () => {
     router.push("/");
   };
 
@@ -36,12 +32,17 @@ export const Header = ({
         color: "white",
       }}
     >
-      <Toolbar sx={{ justifyContent: "space-between" }}>
+      <Toolbar sx={{ justifyContent: "center" }}>
         <Box
+          onClick={handleLogoClick}
           sx={{
             display: "flex",
             alignItems: "center",
-            flexGrow: 1,
+            cursor: "pointer",
+            "&:hover": {
+              opacity: 0.8,
+            },
+            transition: "opacity 0.2s ease-in-out",
           }}
         >
           <Image
@@ -54,25 +55,6 @@ export const Header = ({
             }}
           />
         </Box>
-
-        {showHomeButton && (
-          <Box>
-            <Tooltip title="ホームに戻る" arrow>
-              <IconButton
-                onClick={handleHomeClick}
-                size="medium"
-                sx={{
-                  color: "white",
-                  "&:hover": {
-                    backgroundColor: "rgba(255, 255, 0.1)",
-                  },
-                }}
-              >
-                <HomeIcon />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        )}
       </Toolbar>
     </AppBar>
   );
