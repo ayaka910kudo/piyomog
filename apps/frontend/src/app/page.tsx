@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import { CenteredLayout, CenteredContent } from "@/components/CenteredLayout";
+import Image from "next/image";
 
 export default function Home() {
   const router = useRouter();
@@ -12,26 +13,28 @@ export default function Home() {
   return (
     <CenteredLayout gap={4}>
       <CenteredContent>
-        <Typography
-          variant="h3"
-          component="h1"
-          gutterBottom
+        <Box
           sx={{
             padding: 2,
             textAlign: "center",
-            borderRadius: 1,
-            color: "text.primary",
           }}
         >
-          piyomog
-        </Typography>
+          <Image
+            src="/images/kids.png"
+            alt="子どもたちのイラスト"
+            width={300}
+            height={200}
+            style={{
+              objectFit: "contain",
+            }}
+          />
+        </Box>
       </CenteredContent>
 
       <CenteredContent>
         <Typography
           variant="h6"
           component="h2"
-          gutterBottom
           sx={{
             padding: 2,
             textAlign: "center",
