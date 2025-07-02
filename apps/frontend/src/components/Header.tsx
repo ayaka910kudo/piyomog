@@ -12,7 +12,10 @@ export const Header = () => {
   };
 
   return (
-    <AppBar position="sticky" elevation={2}>
+    <AppBar
+      position="sticky"
+      elevation={0} // 0=影なし, 1=薄い影, 2=普通, 3=濃い影
+    >
       <Toolbar sx={{ justifyContent: "center" }}>
         <Box
           onClick={handleLogoClick}
