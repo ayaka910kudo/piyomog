@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { Home as HomeIcon } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface HeaderProps {
   title?: string;
@@ -36,16 +37,23 @@ export const Header = ({
       }}
     >
       <Toolbar sx={{ justifyContent: "space-between" }}>
-        <Typography
-          variant="h6"
-          component="h1"
+        <Box
           sx={{
-            fontWeight: "bold",
+            display: "flex",
+            alignItems: "center",
             flexGrow: 1,
           }}
         >
-          {title}
-        </Typography>
+          <Image
+            src="/images/logo.png"
+            alt="ぴよもぐロゴ"
+            width={120}
+            height={40}
+            style={{
+              objectFit: "contain",
+            }}
+          />
+        </Box>
 
         {showHomeButton && (
           <Box>
@@ -56,7 +64,7 @@ export const Header = ({
                 sx={{
                   color: "white",
                   "&:hover": {
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    backgroundColor: "rgba(255, 255, 0.1)",
                   },
                 }}
               >
