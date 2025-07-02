@@ -33,8 +33,8 @@ export default function Home() {
 
       <CenteredContent>
         <Typography
-          variant="h6"
-          component="h2"
+          variant="body1"
+          component="p"
           sx={{
             padding: 2,
             textAlign: "center",
