@@ -1,22 +1,10 @@
 "use client";
 
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  IconButton,
-  Tooltip,
-  Box,
-} from "@mui/material";
-import { Home as HomeIcon } from "@mui/icons-material";
+import { AppBar, Toolbar, Box } from "@mui/material";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-interface HeaderProps {
-  title?: string;
-}
-
-export const Header = ({ title = "ぴよもぐ" }: HeaderProps) => {
+export const Header = () => {
   const router = useRouter();
 
   const handleLogoClick = () => {
@@ -24,14 +12,7 @@ export const Header = ({ title = "ぴよもぐ" }: HeaderProps) => {
   };
 
   return (
-    <AppBar
-      position="sticky"
-      elevation={2}
-      sx={{
-        backgroundColor: "primary.main",
-        color: "white",
-      }}
-    >
+    <AppBar position="sticky" elevation={2}>
       <Toolbar sx={{ justifyContent: "center" }}>
         <Box
           onClick={handleLogoClick}
