@@ -1,0 +1,56 @@
+services:
+  # PostgreSQLデータベース
+  postgres:
+    image: postgres:15-alpine
+    container_name: piyomog_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-piyomog}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    # ports:
+    #   - "${POSTGRES_PORT:-5432}:5432"  # 外部からのアクセスが不要な場合はコメントアウト
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # バックエンドAPIサーバー
+  backend:
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    container_name: piyomog_backend
+    restart: always
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:password@postgres:5432/piyomog}
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: 3001
+    ports:
+      - "${BACKEND_PORT:-8008}:3001" # バックエンドは環境変数で設定可能
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: >
+      sh -c "npx prisma db push &&
+             npx prisma generate &&
+             npm run start"
+
+  # フロントエンドWebアプリ
+  frontend:
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile
+    container_name: piyomog_frontend
+    restart: always
+    environment:
+      API_BASE_URL: http://backend:3001 # サーバーサイド用（Docker内部通信）
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8008} # クライアントサイド用（ブラウザから）
+      NODE_ENV: ${NODE_ENV:-development}
+    ports:
+      - "${FRONTEND_PORT:-8007}:3000" # フロントエンドは環境変数で設定可能
+    depends_on:
+      - backend
