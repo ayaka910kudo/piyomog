@@ -26,6 +26,20 @@ body {
 
 * {
   box-sizing: border-box;
+}
+
+/* Reset for specific elements instead of universal selector */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+li {
   padding: 0;
   margin: 0;
 }

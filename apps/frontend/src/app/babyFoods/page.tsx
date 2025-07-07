@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import {
-  Container,
   Typography,
   Box,
   Card,
@@ -20,10 +19,10 @@ import {
   Chip,
   Autocomplete,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
+import { Add as AddIcon } from "@mui/icons-material";
 import Link from "next/link";
 import axios from "axios";
-import { Header } from "@/components/Header";
+import { CenteredLayout, CenteredContent } from "@/components/CenteredLayout";
 
 // 食べ物の型定義
 interface BabyFood {
@@ -130,27 +129,30 @@ export default function BabyFoodsPage() {
 
   if (error) {
     return (
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
-        <Alert severity="error">{error}</Alert>
-      </Container>
+      <Box
+        sx={{ mt: 4, width: "100%", display: "flex", justifyContent: "center" }}
+      >
+        <Box sx={{ width: "80%", maxWidth: "800px" }}>
+          <Alert severity="error">{error}</Alert>
+        </Box>
+      </Box>
     );
   }
 
   return (
     <>
-      <Header title="piyomog" />
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Box display="flex" justifyContent="center" alignItems="center" mb={4}>
-          <Typography variant="h4" component="h1">
+      <CenteredLayout gap={4}>
+        <CenteredContent>
+          <Typography
+            variant="h4"
+            component="h1"
+            sx={{ color: "text.primary" }}
+          >
             食べ物一覧
           </Typography>
-        </Box>
-        <Box
-          display="flex"
-          justifyContent="flex-end"
-          alignItems="center"
-          mb={4}
-        >
+        </CenteredContent>
+
+        <CenteredContent justifyContent="flex-end" textAlign="left">
           <Button
             variant="contained"
             color="primary"
@@ -159,108 +161,123 @@ export default function BabyFoodsPage() {
           >
             新規登録
           </Button>
-        </Box>
+        </CenteredContent>
 
-        {babyFoods.length === 0 ? (
-          <Alert severity="info">登録された食べ物はありません</Alert>
-        ) : (
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: {
-                xs: "1fr",
-                sm: "1fr 1fr",
-                md: "1fr 1fr 1fr",
-              },
-              gap: 3,
-            }}
-          >
-            {babyFoods.map((food) => (
-              <Card key={food.id}>
-                <CardContent>
-                  <Typography variant="h6" component="h2" gutterBottom>
-                    {food.name}
-                  </Typography>
-                  <Box display="flex" alignItems="center" mb={1}>
-                    <Typography component="legend" mr={1}>
-                      反応:
-                    </Typography>
-                    <Rating value={food.reactionStars} readOnly />
-                  </Box>
-                  {food.memo && (
-                    <Typography variant="body2" color="text.secondary" mb={1}>
-                      {food.memo}
-                    </Typography>
-                  )}
-                  {food.ingredients && food.ingredients.length > 0 && (
-                    <Typography variant="body2">
-                      原材料:{" "}
-                      {food.ingredients.map((ing) => ing.name).join(", ")}
-                    </Typography>
-                  )}
-                  <Box mt={2} display="flex" justifyContent="flex-end">
-                    <Button
-                      size="small"
-                      color="primary"
-                      component={Link}
-                      href={`/babyFoods/${food.id}`}
-                    >
-                      詳細
-                    </Button>
-                  </Box>
-                </CardContent>
-              </Card>
-            ))}
-          </Box>
-        )}
-
-        <Dialog
-          open={createDialogOpen}
-          onClose={() => {
-            setCreateDialogOpen(false);
-            setValidationError(null);
-          }}
-          maxWidth="sm"
-          fullWidth
-        >
-          <DialogTitle>食べ物の新規登録</DialogTitle>
-          <DialogContent>
-            {validationError && (
-              <Alert severity="error" sx={{ mb: 2 }}>
-                {validationError}
-              </Alert>
-            )}
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ mb: 2, display: "block" }}
+        <CenteredContent textAlign="left">
+          {babyFoods.length === 0 ? (
+            <Alert severity="info">登録された食べ物はありません</Alert>
+          ) : (
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: {
+                  xs: "1fr",
+                  sm: "1fr 1fr",
+                  md: "1fr 1fr 1fr",
+                },
+                gap: 3,
+              }}
             >
-              * は必須項目です
+              {babyFoods.map((food) => (
+                <Card key={food.id}>
+                  <CardContent>
+                    <Typography variant="h6" component="h2" gutterBottom>
+                      {food.name}
+                    </Typography>
+                    <Box display="flex" alignItems="center" mb={1}>
+                      <Typography component="legend" mr={1}>
+                        反応:
+                      </Typography>
+                      <Rating value={food.reactionStars} readOnly />
+                    </Box>
+                    {food.memo && (
+                      <Typography variant="body2" color="text.secondary" mb={1}>
+                        {food.memo}
+                      </Typography>
+                    )}
+                    {food.ingredients && food.ingredients.length > 0 && (
+                      <Typography variant="body2">
+                        原材料:{" "}
+                        {food.ingredients.map((ing) => ing.name).join(", ")}
+                      </Typography>
+                    )}
+                    <Box mt={2} display="flex" justifyContent="flex-end">
+                      <Button
+                        size="small"
+                        color="primary"
+                        component={Link}
+                        href={`/babyFoods/${food.id}`}
+                      >
+                        詳細
+                      </Button>
+                    </Box>
+                  </CardContent>
+                </Card>
+              ))}
+            </Box>
+          )}
+        </CenteredContent>
+      </CenteredLayout>
+
+      <Dialog
+        open={createDialogOpen}
+        onClose={() => {
+          setCreateDialogOpen(false);
+          setValidationError(null);
+        }}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>食べ物の新規登録</DialogTitle>
+        <DialogContent>
+          {validationError && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {validationError}
+            </Alert>
+          )}
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ mb: 2, display: "block" }}
+          >
+            * は必須項目です
+          </Typography>
+
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              食べ物名 *
             </Typography>
             <TextField
               autoFocus
-              margin="dense"
-              label="食べ物名"
               fullWidth
+              label="食べ物名"
               required
               value={newBabyFood.name}
               onChange={(e) =>
                 setNewBabyFood({ ...newBabyFood, name: e.target.value })
               }
             />
-            <Box sx={{ mt: 2 }}>
-              <Typography component="legend">反応 *</Typography>
-              <Rating
-                value={newBabyFood.reactionStars}
-                onChange={(_, value) =>
-                  setNewBabyFood({ ...newBabyFood, reactionStars: value || 0 })
-                }
-              />
-            </Box>
+          </Box>
+
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              反応 *
+            </Typography>
+            <Rating
+              value={newBabyFood.reactionStars}
+              onChange={(_, value) =>
+                setNewBabyFood({ ...newBabyFood, reactionStars: value || 0 })
+              }
+            />
+          </Box>
+
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              メモ
+            </Typography>
             <TextField
-              margin="dense"
-              label="メモ"
               fullWidth
+              label="メモ"
               multiline
               rows={2}
               value={newBabyFood.memo}
@@ -268,7 +285,13 @@ export default function BabyFoodsPage() {
                 setNewBabyFood({ ...newBabyFood, memo: e.target.value })
               }
             />
-            <FormControl fullWidth margin="dense">
+          </Box>
+
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h6" sx={{ mb: 1 }}>
+              原材料 *
+            </Typography>
+            <FormControl fullWidth>
               <Autocomplete
                 multiple
                 options={ingredients}
@@ -300,26 +323,24 @@ export default function BabyFoodsPage() {
                 }
               />
             </FormControl>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setCreateDialogOpen(false)}>
-              キャンセル
-            </Button>
-            <Button
-              onClick={handleCreateSubmit}
-              variant="contained"
-              color="primary"
-              disabled={
-                !newBabyFood.name.trim() ||
-                newBabyFood.reactionStars === 0 ||
-                newBabyFood.ingredientIds.length === 0
-              }
-            >
-              作成
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Container>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setCreateDialogOpen(false)}>キャンセル</Button>
+          <Button
+            onClick={handleCreateSubmit}
+            variant="contained"
+            color="primary"
+            disabled={
+              !newBabyFood.name.trim() ||
+              newBabyFood.reactionStars === 0 ||
+              newBabyFood.ingredientIds.length === 0
+            }
+          >
+            作成
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

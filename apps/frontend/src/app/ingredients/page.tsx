@@ -2,12 +2,10 @@
 
 import { useState, useEffect } from "react";
 import {
-  Container,
   Box,
   CircularProgress,
   Alert,
   Typography,
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -27,8 +25,8 @@ import {
   Delete as DeleteIcon,
   Add as AddIcon,
 } from "@mui/icons-material";
+import { PageContainer, ContentCard } from "@/components/CenteredLayout";
 import axios from "axios";
-import { Header } from "@/components/Header";
 
 interface Ingredient {
   id: number;
@@ -186,148 +184,173 @@ export default function IngredientsPage() {
 
   if (error) {
     return (
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <PageContainer>
         <Alert severity="error">{error}</Alert>
-      </Container>
+      </PageContainer>
     );
   }
 
   return (
-    <>
-      <Header title="piyomog" />
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Paper elevation={3} sx={{ p: 4 }}>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            mb={3}
-          >
-            <Typography variant="h4" component="h1">
-              原材料一覧
-            </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<AddIcon />}
-              onClick={handleCreateClick}
-            >
-              新規作成
-            </Button>
-          </Box>
-
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>原材料名</TableCell>
-                  <TableCell align="right">操作</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {ingredients.map((ingredient) => (
-                  <TableRow key={ingredient.id}>
-                    <TableCell>{ingredient.id}</TableCell>
-                    <TableCell>{ingredient.name}</TableCell>
-                    <TableCell align="right">
-                      <IconButton
-                        onClick={() => handleEditClick(ingredient)}
-                        color="primary"
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        onClick={() => handleDeleteClick(ingredient.id)}
-                        color="error"
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
-
-        <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
-          <DialogTitle>原材料名の編集</DialogTitle>
-          <DialogContent>
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ mb: 2, display: "block" }}
-            >
-              * は必須項目です
-            </Typography>
-            <TextField
-              autoFocus
-              margin="dense"
-              label="原材料名"
-              fullWidth
-              required
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setEditDialogOpen(false)}>キャンセル</Button>
-            <Button
-              onClick={handleEditSubmit}
-              variant="contained"
-              color="primary"
-              disabled={!newName.trim()}
-            >
-              保存
-            </Button>
-          </DialogActions>
-        </Dialog>
-
-        <Dialog
-          open={createDialogOpen}
-          onClose={() => setCreateDialogOpen(false)}
+    <PageContainer>
+      <ContentCard>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={4}
         >
-          <DialogTitle>原材料の新規作成</DialogTitle>
-          <DialogContent>
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ mb: 2, display: "block" }}
-            >
-              * は必須項目です
-            </Typography>
-            <TextField
-              autoFocus
-              margin="dense"
-              label="原材料名"
-              fullWidth
-              required
-              value={createName}
-              onChange={(e) => setCreateName(e.target.value)}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setCreateDialogOpen(false)}>
-              キャンセル
-            </Button>
-            <Button
-              onClick={handleCreateSubmit}
-              variant="contained"
-              color="primary"
-              disabled={!createName.trim()}
-            >
-              作成
-            </Button>
-          </DialogActions>
-        </Dialog>
+          <Typography variant="h4" component="h1">
+            原材料一覧
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+            onClick={handleCreateClick}
+          >
+            新規作成
+          </Button>
+        </Box>
 
-        <ErrorDialog
-          open={errorDialogOpen}
-          onClose={handleErrorDialogClose}
-          message={errorMessage}
-        />
-      </Container>
-    </>
+        <TableContainer sx={{ mt: 2 }}>
+          <Table sx={{ "& .MuiTableCell-root": { padding: "12px 20px" } }}>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ fontWeight: "bold" }}>ID</TableCell>
+                <TableCell sx={{ fontWeight: "bold" }}>原材料名</TableCell>
+                <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                  操作
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {ingredients.map((ingredient) => (
+                <TableRow
+                  key={ingredient.id}
+                  sx={{
+                    "&:nth-of-type(odd)": {
+                      backgroundColor: "rgba(0, 0, 0, 0.02)",
+                    },
+                    "&:hover": {
+                      backgroundColor: "rgba(0, 0, 0, 0.04)",
+                    },
+                    height: "48px",
+                  }}
+                >
+                  <TableCell sx={{ fontSize: "1rem" }}>
+                    {ingredient.id}
+                  </TableCell>
+                  <TableCell sx={{ fontSize: "1rem" }}>
+                    {ingredient.name}
+                  </TableCell>
+                  <TableCell align="right">
+                    <IconButton
+                      onClick={() => handleEditClick(ingredient)}
+                      sx={{
+                        mr: 1,
+                        color: "rgba(0, 0, 0, 0.6)",
+                        "&:hover": {
+                          backgroundColor: "rgba(0, 0, 0, 0.04)",
+                          color: "rgba(0, 0, 0, 0.8)",
+                        },
+                      }}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => handleDeleteClick(ingredient.id)}
+                      sx={{
+                        color: "rgba(0, 0, 0, 0.6)",
+                        "&:hover": {
+                          backgroundColor: "rgba(0, 0, 0, 0.04)",
+                          color: "rgba(0, 0, 0, 0.8)",
+                        },
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </ContentCard>
+
+      <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
+        <DialogTitle>原材料名の編集</DialogTitle>
+        <DialogContent>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ mb: 2, display: "block" }}
+          >
+            * は必須項目です
+          </Typography>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="原材料名"
+            fullWidth
+            required
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditDialogOpen(false)}>キャンセル</Button>
+          <Button
+            onClick={handleEditSubmit}
+            variant="contained"
+            color="primary"
+            disabled={!newName.trim()}
+          >
+            保存
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={createDialogOpen}
+        onClose={() => setCreateDialogOpen(false)}
+      >
+        <DialogTitle>原材料の新規作成</DialogTitle>
+        <DialogContent>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ mb: 2, display: "block" }}
+          >
+            * は必須項目です
+          </Typography>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="原材料名"
+            fullWidth
+            required
+            value={createName}
+            onChange={(e) => setCreateName(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setCreateDialogOpen(false)}>キャンセル</Button>
+          <Button
+            onClick={handleCreateSubmit}
+            variant="contained"
+            color="primary"
+            disabled={!createName.trim()}
+          >
+            作成
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <ErrorDialog
+        open={errorDialogOpen}
+        onClose={handleErrorDialogClose}
+        message={errorMessage}
+      />
+    </PageContainer>
   );
 }

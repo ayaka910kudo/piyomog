@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import {
-  Container,
   Box,
   CircularProgress,
   Alert,
   Typography,
-  Paper,
   Chip,
   Rating,
   Button,
@@ -15,9 +13,8 @@ import {
   Autocomplete,
 } from "@mui/material";
 import axios from "axios";
-import { use } from "react";
 import { useRouter } from "next/navigation";
-import { Header } from "@/components/Header";
+import { PageContainer, ContentCard } from "@/components/CenteredLayout";
 
 // 食べ物の型定義
 interface BabyFood {
@@ -118,149 +115,152 @@ export default function BabyFoodEditPage({
 
   if (error) {
     return (
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <PageContainer>
         <Alert severity="error">{error}</Alert>
-      </Container>
+      </PageContainer>
     );
   }
 
   if (!babyFood) {
     return (
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <PageContainer>
         <Alert severity="error">食べ物が見つかりません</Alert>
-      </Container>
+      </PageContainer>
     );
   }
 
   return (
-    <>
-      <Header title="食べ物編集" />
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Paper elevation={3} sx={{ p: 4 }}>
-          <Typography variant="h4" component="h1" gutterBottom>
-            食べ物の編集
-          </Typography>
+    <PageContainer>
+      <ContentCard>
+        <Typography variant="h4" component="h1" sx={{ mb: 3 }}>
+          食べ物の編集
+        </Typography>
 
-          {validationError && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {validationError}
-            </Alert>
-          )}
+        {validationError && (
+          <Alert severity="error" sx={{ mb: 3 }}>
+            {validationError}
+          </Alert>
+        )}
 
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            sx={{ mb: 2, display: "block" }}
-          >
-            * は必須項目です
-          </Typography>
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ mb: 3, display: "block" }}
+        >
+          * は必須項目です
+        </Typography>
 
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-              gap: 3,
-              mt: 3,
-            }}
-          >
-            <Box>
-              <Box sx={{ mb: 3 }}>
-                <TextField
-                  fullWidth
-                  label="食べ物名"
-                  required
-                  value={babyFood.name}
-                  onChange={(e) =>
-                    setBabyFood({ ...babyFood, name: e.target.value })
-                  }
-                  sx={{ mb: 2 }}
-                />
-              </Box>
-
-              <Box sx={{ mb: 3 }}>
-                <Typography variant="h6" gutterBottom>
-                  反応 *
-                </Typography>
-                <Rating
-                  value={babyFood.reactionStars}
-                  onChange={(_, value) =>
-                    setBabyFood({ ...babyFood, reactionStars: value || 0 })
-                  }
-                  size="large"
-                  sx={{ mb: 2 }}
-                />
-              </Box>
-
-              <Box sx={{ mb: 3 }}>
-                <TextField
-                  fullWidth
-                  label="メモ"
-                  multiline
-                  rows={4}
-                  value={babyFood.memo || ""}
-                  onChange={(e) =>
-                    setBabyFood({ ...babyFood, memo: e.target.value })
-                  }
-                />
-              </Box>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+            gap: 4,
+            mt: 2,
+          }}
+        >
+          <Box>
+            <Box sx={{ mb: 4 }}>
+              <Typography variant="h6" sx={{ mb: 1.5 }}>
+                食べ物名 *
+              </Typography>
+              <TextField
+                fullWidth
+                label="食べ物名"
+                required
+                value={babyFood.name}
+                onChange={(e) =>
+                  setBabyFood({ ...babyFood, name: e.target.value })
+                }
+                sx={{ mt: 1 }}
+              />
             </Box>
 
-            <Box>
-              <Typography variant="h6" gutterBottom>
-                使用食材
+            <Box sx={{ mb: 4 }}>
+              <Typography variant="h6" sx={{ mb: 1.5 }}>
+                反応 *
               </Typography>
-              <Autocomplete
-                multiple
-                options={ingredients}
-                getOptionLabel={(option) => option.name}
-                value={babyFood.ingredients}
-                onChange={(_, newValue) => {
-                  setBabyFood({ ...babyFood, ingredients: newValue });
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="原材料"
-                    placeholder="原材料を選択"
-                    required
-                  />
-                )}
-                renderTags={(value, getTagProps) =>
-                  value.map((option, index) => {
-                    const { key, ...chipProps } = getTagProps({ index });
-                    return (
-                      <Chip key={key} label={option.name} {...chipProps} />
-                    );
-                  })
+              <Rating
+                value={babyFood.reactionStars}
+                onChange={(_, value) =>
+                  setBabyFood({ ...babyFood, reactionStars: value || 0 })
                 }
+                size="large"
+                sx={{ mt: 1 }}
+              />
+            </Box>
+
+            <Box sx={{ mb: 4 }}>
+              <Typography variant="h6" sx={{ mb: 1.5 }}>
+                メモ
+              </Typography>
+              <TextField
+                fullWidth
+                label="メモ"
+                multiline
+                rows={4}
+                value={babyFood.memo || ""}
+                onChange={(e) =>
+                  setBabyFood({ ...babyFood, memo: e.target.value })
+                }
+                sx={{ mt: 1 }}
               />
             </Box>
           </Box>
 
-          <Box
-            sx={{ mt: 4, display: "flex", justifyContent: "flex-end", gap: 2 }}
-          >
-            <Button
-              variant="outlined"
-              onClick={() => router.push(`/babyFoods/${resolvedParams.id}`)}
-            >
-              キャンセル
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleUpdate}
-              disabled={
-                !babyFood.name.trim() ||
-                babyFood.reactionStars === 0 ||
-                babyFood.ingredients.length === 0
+          <Box>
+            <Typography variant="h6" sx={{ mb: 1.5 }}>
+              使用食材
+            </Typography>
+            <Autocomplete
+              multiple
+              options={ingredients}
+              getOptionLabel={(option) => option.name}
+              value={babyFood.ingredients}
+              onChange={(_, newValue) => {
+                setBabyFood({ ...babyFood, ingredients: newValue });
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="原材料"
+                  placeholder="原材料を選択"
+                  required
+                />
+              )}
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => {
+                  const { key, ...chipProps } = getTagProps({ index });
+                  return <Chip key={key} label={option.name} {...chipProps} />;
+                })
               }
-            >
-              更新
-            </Button>
+              sx={{ mt: 1 }}
+            />
           </Box>
-        </Paper>
-      </Container>
-    </>
+        </Box>
+
+        <Box
+          sx={{ mt: 5, display: "flex", justifyContent: "flex-end", gap: 2 }}
+        >
+          <Button
+            variant="outlined"
+            onClick={() => router.push(`/babyFoods/${resolvedParams.id}`)}
+          >
+            キャンセル
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleUpdate}
+            disabled={
+              !babyFood.name.trim() ||
+              babyFood.reactionStars === 0 ||
+              babyFood.ingredients.length === 0
+            }
+          >
+            更新
+          </Button>
+        </Box>
+      </ContentCard>
+    </PageContainer>
   );
 }

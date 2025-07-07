@@ -1,70 +1,44 @@
 "use client";
 
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  IconButton,
-  Tooltip,
-  Box,
-} from "@mui/material";
-import { Home as HomeIcon } from "@mui/icons-material";
+import { AppBar, Toolbar, Box } from "@mui/material";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
-interface HeaderProps {
-  title?: string;
-  showHomeButton?: boolean;
-}
-
-export const Header = ({
-  title = "ぴよもぐ",
-  showHomeButton = true,
-}: HeaderProps) => {
+export const Header = () => {
   const router = useRouter();
 
-  const handleHomeClick = () => {
+  const handleLogoClick = () => {
     router.push("/");
   };
 
   return (
     <AppBar
       position="sticky"
-      elevation={2}
-      sx={{
-        backgroundColor: "primary.main",
-        color: "white",
-      }}
+      elevation={0} // 0=影なし, 1=薄い影, 2=普通, 3=濃い影
     >
-      <Toolbar sx={{ justifyContent: "space-between" }}>
-        <Typography
-          variant="h6"
-          component="h1"
+      <Toolbar sx={{ justifyContent: "center" }}>
+        <Box
+          onClick={handleLogoClick}
           sx={{
-            fontWeight: "bold",
-            flexGrow: 1,
+            display: "flex",
+            alignItems: "center",
+            cursor: "pointer",
+            "&:hover": {
+              opacity: 0.8,
+            },
+            transition: "opacity 0.2s ease-in-out",
           }}
         >
-          {title}
-        </Typography>
-
-        {showHomeButton && (
-          <Box>
-            <Tooltip title="ホームに戻る" arrow>
-              <IconButton
-                onClick={handleHomeClick}
-                size="medium"
-                sx={{
-                  color: "white",
-                  "&:hover": {
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  },
-                }}
-              >
-                <HomeIcon />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        )}
+          <Image
+            src="/images/logo.png"
+            alt="ぴよもぐロゴ"
+            width={120}
+            height={40}
+            style={{
+              objectFit: "contain",
+            }}
+          />
+        </Box>
       </Toolbar>
     </AppBar>
   );

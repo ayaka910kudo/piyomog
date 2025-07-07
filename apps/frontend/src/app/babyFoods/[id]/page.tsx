@@ -1,27 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
+import { useRouter } from "next/navigation";
 import {
-  Container,
   Box,
-  CircularProgress,
-  Alert,
   Typography,
-  Paper,
-  Chip,
   Rating,
+  Chip,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
+  Alert,
+  CircularProgress,
 } from "@mui/material";
+import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import {
+  PageContainer,
+  ContentCard,
+  ActionButtons,
+} from "@/components/CenteredLayout";
 import axios from "axios";
-import { use } from "react";
-import { useRouter } from "next/navigation";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import { Header } from "@/components/Header";
 
 // 食べ物の型定義
 interface BabyFood {
@@ -94,120 +94,122 @@ export default function BabyFoodDetailPage({
 
   if (error) {
     return (
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <PageContainer>
         <Alert severity="error">{error}</Alert>
-      </Container>
+      </PageContainer>
     );
   }
 
   return (
-    <>
-      <Header title="食べ物詳細" />
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Paper elevation={3} sx={{ p: 4, position: "relative" }}>
-          <Box
-            sx={{
-              position: "absolute",
-              top: 16,
-              right: 16,
-              display: "flex",
-              gap: 2,
-            }}
+    <PageContainer>
+      <ContentCard enableActions>
+        <ActionButtons>
+          <Button
+            variant="outlined"
+            color="primary"
+            startIcon={<EditIcon />}
+            onClick={() => router.push(`/babyFoods/${resolvedParams.id}/edit`)}
           >
-            <Button
-              variant="outlined"
-              color="primary"
-              startIcon={<EditIcon />}
-              onClick={() =>
-                router.push(`/babyFoods/${resolvedParams.id}/edit`)
-              }
-            >
-              編集
-            </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              startIcon={<DeleteIcon />}
-              onClick={() => setDeleteDialogOpen(true)}
-            >
-              削除
-            </Button>
-          </Box>
-
-          <Typography variant="h4" component="h1" gutterBottom>
-            {babyFood?.name}
-          </Typography>
-
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-              gap: 3,
-              mt: 3,
-            }}
+            編集
+          </Button>
+          <Button
+            variant="outlined"
+            color="error"
+            startIcon={<DeleteIcon />}
+            onClick={() => setDeleteDialogOpen(true)}
           >
-            <Box>
-              <Box sx={{ mb: 3 }}>
-                <Typography variant="h6" gutterBottom>
-                  反応
-                </Typography>
-                <Rating
-                  value={babyFood?.reactionStars}
-                  readOnly
-                  size="large"
-                  sx={{ mb: 2 }}
-                />
-              </Box>
+            削除
+          </Button>
+        </ActionButtons>
 
-              <Box sx={{ mb: 3 }}>
-                <Typography variant="h6" gutterBottom>
-                  メモ
-                </Typography>
-                <Typography variant="body1" color="text.secondary">
-                  {babyFood?.memo || "メモはありません"}
-                </Typography>
-              </Box>
-            </Box>
+        <Typography variant="h6" sx={{ mb: 1.5 }}>
+          食べ物名
+        </Typography>
+        <Typography variant="h4" component="h1" sx={{ mb: 4 }}>
+          {babyFood?.name}
+        </Typography>
 
-            <Box>
-              <Typography variant="h6" gutterBottom>
-                使用食材
-              </Typography>
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                {babyFood?.ingredients.map((ingredient) => (
-                  <Chip
-                    key={ingredient.id}
-                    label={ingredient.name}
-                    color="primary"
-                    variant="outlined"
-                  />
-                ))}
-              </Box>
-            </Box>
-          </Box>
-        </Paper>
-
-        <Dialog
-          open={deleteDialogOpen}
-          onClose={() => setDeleteDialogOpen(false)}
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+            gap: 4,
+            mt: 2,
+          }}
         >
-          <DialogTitle>食べ物の削除</DialogTitle>
-          <DialogContent>
-            <Typography>
-              「{babyFood?.name}」を削除してもよろしいですか？
-              この操作は取り消せません。
+          <Box>
+            <Box sx={{ mb: 4 }}>
+              <Typography variant="h6" sx={{ mb: 1.5 }}>
+                反応
+              </Typography>
+              <Rating
+                value={babyFood?.reactionStars}
+                readOnly
+                size="large"
+                sx={{ mt: 1 }}
+              />
+            </Box>
+
+            <Box sx={{ mb: 4 }}>
+              <Typography variant="h6" sx={{ mb: 1.5 }}>
+                メモ
+              </Typography>
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                sx={{
+                  lineHeight: 1.6,
+                  mt: 1,
+                }}
+              >
+                {babyFood?.memo || "メモはありません"}
+              </Typography>
+            </Box>
+          </Box>
+
+          <Box>
+            <Typography variant="h6" sx={{ mb: 1.5 }}>
+              使用食材
             </Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setDeleteDialogOpen(false)}>
-              キャンセル
-            </Button>
-            <Button onClick={handleDelete} color="error" variant="contained">
-              削除
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Container>
-    </>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 1.5,
+                mt: 1,
+              }}
+            >
+              {babyFood?.ingredients.map((ingredient) => (
+                <Chip
+                  key={ingredient.id}
+                  label={ingredient.name}
+                  color="primary"
+                  variant="outlined"
+                />
+              ))}
+            </Box>
+          </Box>
+        </Box>
+      </ContentCard>
+
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+      >
+        <DialogTitle>食べ物の削除</DialogTitle>
+        <DialogContent>
+          <Typography>
+            「{babyFood?.name}」を削除してもよろしいですか？
+            この操作は取り消せません。
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)}>キャンセル</Button>
+          <Button onClick={handleDelete} color="error" variant="contained">
+            削除
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </PageContainer>
   );
 }
