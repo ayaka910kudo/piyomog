@@ -5,8 +5,8 @@
 このプロジェクトは Docker Compose を使用して、以下のサービスを本番環境で動作させます：
 
 - **PostgreSQL**: データベース（内部ポート 5432、外部公開なし）
-- **Express API**: バックエンド API（ポート 3001）
-- **Next.js**: フロントエンド Web アプリ（ポート 3000）
+- **Express API**: バックエンド API（ポート 8008）
+- **Next.js**: フロントエンド Web アプリ（ポート 8007）
 
 ## 前提条件
 
@@ -21,17 +21,17 @@
 
 ```bash
 # 現在使用中のポートを確認
-sudo netstat -tlnp | grep -E ":(3000|3001|5432)"
+sudo netstat -tlnp | grep -E ":(8007|8008|5432)"
 
 # または
-sudo lsof -i :3000 -i :3001 -i :5432
+sudo lsof -i :8007 -i :8008 -i :5432
 ```
 
 **ポート競合がある場合の対処法:**
 
 - PostgreSQL（5432）: デフォルトで外部公開していないため問題なし
-- バックエンド（3001）: `docker-compose.yml`で `"8001:3001"` などに変更
-- フロントエンド（3000）: `docker-compose.yml`で `"8080:3000"` などに変更
+- バックエンド（8008）: `docker-compose.yml`で `"8009:3001"` などに変更
+- フロントエンド（8007）: `docker-compose.yml`で `"8080:3000"` などに変更
 
 ### 2. 環境変数の設定
 
@@ -64,7 +64,7 @@ DATABASE_URL=postgresql://postgres:password@postgres:5432/piyomog
 NODE_ENV=production
 
 # フロントエンド設定
-NEXT_PUBLIC_API_URL=http://localhost:3001  # 本番環境では実際のURLに変更
+NEXT_PUBLIC_API_URL=http://localhost:8008  # 本番環境では実際のURLに変更
 ```
 
 #### 2-2. バックエンド（開発環境用）
@@ -126,8 +126,8 @@ npx prisma migrate deploy
 
 ### 6. アプリケーションの確認
 
-- フロントエンド: http://localhost:3000
-- バックエンド API: http://localhost:3001
+- フロントエンド: http://localhost:8007
+- バックエンド API: http://localhost:8008
 - PostgreSQL: localhost:5432
 
 ## 開発環境での使用
@@ -153,13 +153,13 @@ npm run dev
 
 ### ポート競合エラー
 
-**症状**: `Error starting userland proxy: listen tcp4 0.0.0.0:3000: bind: address already in use`
+**症状**: `Error starting userland proxy: listen tcp4 0.0.0.0:8007: bind: address already in use`
 
 **確認方法**:
 
 ```bash
 # 使用中のポートを確認
-sudo lsof -i :3000  # または該当するポート番号
+sudo lsof -i :8007  # または該当するポート番号（8007, 8008）
 ```
 
 **対処法**:
@@ -169,8 +169,8 @@ sudo lsof -i :3000  # または該当するポート番号
    ```yaml
    # docker-compose.ymlで変更
    ports:
-     - "8080:3000" # フロントエンド
-     - "8001:3001" # バックエンド
+     - "8080:3000" # フロントエンド（現在8007を使用中）
+     - "8009:3001" # バックエンド（現在8008を使用中）
    ```
 3. **PostgreSQL ポート**: 既にコメントアウト済みのため問題なし
 
