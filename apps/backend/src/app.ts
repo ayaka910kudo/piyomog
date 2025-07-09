@@ -17,6 +17,9 @@ app.get("/", (req, res) => {
 app.use("/api/baby-foods", babyFoodRouter);
 app.use("/api/ingredients", ingredientRouter);
 
-app.listen(8000, () => {
-  console.log("Example app listening on port 8000!");
+// ポート設定（環境変数から取得、デフォルトは3001）
+const port = process.env.PORT || 3001;
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}!`);
 });

@@ -1,0 +1,21 @@
+# データベースデータディレクトリ
+/data/
+
+# 環境変数ファイル
+.env
+.env.local
+.env.production
+
+# ログファイル
+*.log
+
+# OS固有ファイル
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Docker関連
+docker-compose.override.yml

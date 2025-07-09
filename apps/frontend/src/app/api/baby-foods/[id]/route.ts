@@ -1,19 +1,19 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 
-// バックエンドのベースURL
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+// バックエンドのベースURL（サーバーサイド用）
+const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3001";
 
 if (!API_BASE_URL) {
-  throw new Error("NEXT_PUBLIC_API_URL is not defined");
+  throw new Error("API_BASE_URL is not defined");
 }
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
@@ -39,10 +39,10 @@ export async function GET(
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
@@ -81,11 +81,11 @@ export async function PATCH(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     console.log("DELETE request received with params:", params);
-    const { id } = params;
+    const { id } = await params;
 
     if (!id) {
       console.log("Error: ID is missing");

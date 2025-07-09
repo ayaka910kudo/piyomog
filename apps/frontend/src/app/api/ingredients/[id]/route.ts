@@ -1,16 +1,20 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 
-// バックエンドのベースURL
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+// バックエンドのベースURL（サーバーサイド用）
+const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3001";
+
+if (!API_BASE_URL) {
+  throw new Error("API_BASE_URL is not defined");
+}
 
 // 更新
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
 
     if (!id) {
@@ -39,10 +43,10 @@ export async function PATCH(
 // 削除
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
@@ -60,7 +64,7 @@ export async function DELETE(
       });
     }
     return NextResponse.json(
-      { error: "Failed to delete ingredient" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
